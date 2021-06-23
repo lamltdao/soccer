@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - name: auth
+        image: midfieldmagician254/auth
+        env:
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_SECRET
+          - name: MONGO_ATLAS_USER
+            value: user
+          - name: MONGO_ATLAS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-atlas-password
+                auth
+      - MONGO_ATLAS_DB=auth
+      - PORT=3000
+      - JWT_SECRET=SECRET
