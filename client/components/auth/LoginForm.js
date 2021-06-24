@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -36,24 +37,20 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginForm = () => {
   const classes = useStyles();
-  const loginUser = async event => {
-    event.preventDefault()
-
-    const res = await axios('/api/auth/login', {
+  const loginUser = event => {
+    event.preventDefault();
+    axios('http://localhost:3001/api/auth/login', {
       body: JSON.stringify({
-        name: event.target.name.value,
         email: event.target.email.value,
-        username: event.target.username.value,
         password: event.target.password.value,
       }),
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST'
+    }).then(({ data }) => {
+      console.log(data);
     })
-
-    const result = await res.json()
-    // result.user => 'Ada Lovelace'
   }
 
   return (

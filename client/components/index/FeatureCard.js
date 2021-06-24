@@ -69,7 +69,7 @@ FeatureCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
-  imageSrc: PropTypes.string.isRequired,
+  imageSrc: PropTypes.object.isRequired,
 };
 
 export default FeatureCard;

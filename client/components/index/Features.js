@@ -20,19 +20,19 @@ const Features = (props) => {
     {
       title: 'Soccer fields',
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry 's versions of Lorem Ipsum.",
-      link: '/',
+      link: '/soccer-fields',
       imageSrc: mapPic,
     },
     {
       title: 'Leagues/Tournaments',
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry 's versions of Lorem Ipsum.",
-      link: '/',
+      link: '/leagues-tournaments',
       imageSrc: trophyPic,
     },
     {
       title: 'Blogs',
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry 's versions of Lorem Ipsum.",
-      link: '/',
+      link: '/blogs',
       imageSrc: footballPic,
     },
   ];
@@ -46,8 +46,8 @@ const Features = (props) => {
         </Grid>
       </Grid>
       <Grid container direction="row" justify='space-evenly' spacing={2} className={classes.root}>
-        {features.map(({ title, description, link, imageSrc }) => (
-          <Grid item>
+        {features.map(({ title, description, link, imageSrc }, idx) => (
+          <Grid item key={idx}>
             <FeatureCard
               title={title}
               description={description}
