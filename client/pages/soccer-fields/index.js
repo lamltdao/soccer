@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Layout from '../../layouts/Layout';
 import Map from '../../components/soccer-fields/Map';
+import SoccerFieldsTable from '../../components/soccer-fields/SoccerFieldsTable';
 
 const SFIndex = () => {
-  return (
+  /** Interface for element in soccerFields fetched from DB
+   * name: string;
+   * position?: {
+   *  lat: Number,
+   *  lng: Number
+   * },
+   * color?: string
+   */
+   const [soccerFields, setSoccerFields] = useState([]);
+   return (
     <div>
       <Head>
         <title>Soccer fields</title>
@@ -13,8 +23,8 @@ const SFIndex = () => {
       </Head>
       <Layout>
         <>
-          <Map />
-          <h1>Search for soccer field</h1>
+          {/* <Map soccerFields={soccerFields} setSoccerFields={setSoccerFields}/> */}
+          <SoccerFieldsTable soccerFields={soccerFields} />
         </>
       </Layout>
     </div>
