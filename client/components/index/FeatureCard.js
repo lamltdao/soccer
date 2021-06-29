@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
   },
   featureLink: {
-    color: theme.palette.success.main
+    color: theme.palette.success.main,
   },
 }));
 
@@ -31,7 +31,9 @@ const FeatureCard = ({ title, description, link, imageSrc }) => {
     <Image src={imageSrc} alt="Logo" height="400px" />
   );
   return (
-    <Card className={classes.root}>
+    <Card
+      className={classes.root}
+    >
       <div className={classes.cardLogoBg}>
         <ImageComponent />
       </div>
@@ -54,7 +56,7 @@ const FeatureCard = ({ title, description, link, imageSrc }) => {
           </Grid>
           <Grid item>
             <Link href={link}>
-              <a style={{textDecoration: 'none'}}>
+              <a style={{ textDecoration: 'none' }}>
                 <Typography className={classes.featureLink}>Explore</Typography>
               </a>
             </Link>

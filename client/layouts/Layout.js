@@ -6,16 +6,21 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minHeight: '700px',
+    minHeight: 700,
   },
+  rootPadding: {
+    minHeight: 700,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  }
 }));
 
-const Layout = ({ children }) => {
+const Layout = ({ children, stickToSide }) => {
   const classes = useStyles();
   return (
     <>
       <Navbar />
-      <div className={classes.root}>
+      <div className={stickToSide ? classes.root : classes.rootPadding}>
         {children}
       </div>
       <Footer />
@@ -25,6 +30,11 @@ const Layout = ({ children }) => {
 
 Layout.propTypes = {
   children: PropTypes.element.isRequired,
+  stickToSide: PropTypes.bool,
 };
+
+Layout.defaultProps = {
+  stickToSide: true,
+}
 
 export default Layout;

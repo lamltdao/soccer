@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { Typography, Grid, makeStyles, Button } from '@material-ui/core';
-//
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-//
+import {
+  Typography,
+  makeStyles,
+  InputLabel,
+  Select,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Paper,
+  FormControl,
+} from '@material-ui/core';
+import { SOCCERFIELDS_STATUS, SORT_ORDER } from '../../constants';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
@@ -64,17 +63,19 @@ SoccerFieldsTable.propTypes = {
 
 export default SoccerFieldsTable;
 
-// Helpers function dealing with sorting and selecting rows
+// Create mock data
 
-function createData(name, price, distance, status) {
-  return { name, price, distance, status };
+function createData(placeId, name, price, distance, status) {
+  return { placeId, name, price, distance, status };
 }
 
 const rows = [
-  createData('San bong Hn-ams', 800000, 8, 'Vacant'),
-  createData('San bong HSGS', 1000000, 9, 'Vacant'),
-  createData('San bong Thanh phat', 500000, 8.5, 'Full'),
+  createData('ad', 'San bong Hn-ams', 800000, 8.7, 'Vacant'),
+  createData('asv', 'San bong HSGS', 1000000, 9.2, 'Vacant'),
+  createData('vsv', 'San bong Thanh phat', 500000, 8.5, 'Full'),
 ];
+
+// Helpers function dealing with sorting and selecting rows
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -92,9 +93,9 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort(rows, comparator, status = null) {
+function stableSort(rows, comparator, status) {
   const stabilizedThis = rows
-    .filter((row) => status == null || row.status === status)
+    .filter((row) => status === SOCCERFIELDS_STATUS.All || row.status === status)
     .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -104,47 +105,98 @@ function stableSort(rows, comparator, status = null) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+
 // TABLE HEAD
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort, statusShown, setStatusShown } = props;
+  const {
+    classes,
+    order,
+    orderBy,
+    onRequestSort,
+    statusShown,
+    setStatusShown,
+  } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
-  const handleStatusChange = () => {
-    setStatusShown((prev) => {
-      if(prev == null || prev == 'Full') {
-        return 'Vacant';
-      }
-      else return null;
-    })
-  }
+  // functions to handle status column
+  const [selectStatusOpen, setSelectStatusOpen] = useState(false);
+  const handleOpen = () => {
+    setSelectStatusOpen(true);
+  };
+  const handleClose = () => {
+    setSelectStatusOpen(false);
+  };
+  const handleChange = (e) => {
+    setStatusShown(e.target.value);
+  };
+
+  const MenuProps = {
+    PaperProps: {
+      className: classes.selectStatusMenu,
+    },
+  };
   return (
     <TableHead>
-      <TableRow>
-        <TableCell>Name</TableCell>
+      <TableRow className={classes.tableHead}>
+        <TableCell>
+          <Typography color="secondary">Name</Typography>
+        </TableCell>
         <TableCell sortDirection={orderBy === 'price' ? order : false}>
           <TableSortLabel
             active={orderBy === 'price'}
             direction={orderBy === 'price' ? order : 'asc'}
             onClick={createSortHandler('price')}
+            classes={{
+              icon: classes.sortIcon
+            }}
           >
-            Price
+            <Typography color="secondary">Price</Typography>
           </TableSortLabel>
         </TableCell>
         <TableCell sortDirection={orderBy === 'distance' ? order : false}>
           <TableSortLabel
+            classes={{
+              icon: classes.sortIcon
+            }}
             active={orderBy === 'distance'}
             direction={orderBy === 'distance' ? order : 'asc'}
             onClick={createSortHandler('distance')}
           >
-            Distance
+            <Typography color="secondary">Distance</Typography>
           </TableSortLabel>
         </TableCell>
         <TableCell>
-          <Button onClick={handleStatusChange}>
-            {statusShown ? 'Vacant' : 'Status'}
-          </Button>
+          <FormControl className={classes.statusFormControl}>
+            <InputLabel>
+              <Typography color="secondary">Status</Typography>
+            </InputLabel>
+            <Select
+              open={selectStatusOpen}
+              onClose={handleClose}
+              onOpen={handleOpen}
+              value={statusShown}
+              onChange={handleChange}
+              MenuProps={MenuProps}
+              classes={{
+                icon: classes.dropDownIcon,
+              }}
+            >
+              <MenuItem value={SOCCERFIELDS_STATUS.All}>
+                <Typography color="secondary">All</Typography>
+              </MenuItem>
+              <MenuItem value={SOCCERFIELDS_STATUS.Vacant}>
+                <Typography color="secondary">Vacant</Typography>
+              </MenuItem>
+              <MenuItem value={SOCCERFIELDS_STATUS.Full}>
+                <Typography color="secondary">Full</Typography>
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </TableCell>
+        <TableCell>
+          <Typography color="secondary">Detail</Typography>
         </TableCell>
       </TableRow>
     </TableHead>
@@ -154,83 +206,117 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf([SORT_ORDER.asc, SORT_ORDER.desc]).isRequired,
   orderBy: PropTypes.oneOf(['price', 'distance']).isRequired,
   setStatusShown: PropTypes.func.isRequired,
   statusShown: PropTypes.string,
 };
 
 // TABLE BODY
+
+// styles used for both EnhancedTable and EnhancedTableHead(passing down prop classes)
 const useTableStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-  },
-  paper: {
-    width: '100%',
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
-  table: {
-    minWidth: 750,
+  statusFormControl: {
+    marginRight: theme.spacing(1),
+    minWidth: 100,
   },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
+  tableHead: {
+    backgroundColor: theme.palette.primary.main,
   },
+  vacantRow: {
+    backgroundColor: theme.palette.success.main,
+  },
+  fullRow: {
+    backgroundColor: theme.palette.error.main,
+  },
+  selectStatusMenu: {
+    '& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover': {
+      backgroundColor: theme.palette.info.main,
+    },
+    '& .MuiListItem-root': {
+      backgroundColor: theme.palette.primary.main,
+    },
+    '& .MuiList-padding': {
+      padding: 0,
+    },
+  },
+  dropDownIcon: {
+    color: 'white',
+  },
+  sortIcon: {
+    backgroundColor: 'white',
+  }
 }));
 
 const EnhancedTable = () => {
   const classes = useTableStyles();
-  const [order, setOrder] = useState('asc');
+  // By default, items are sorted in ascending order of price
+  const [order, setOrder] = useState(SORT_ORDER.asc);
   const [orderBy, setOrderBy] = useState('price');
-  const [statusShown, setStatusShown] = useState(null);
+  const [statusShown, setStatusShown] = useState(SOCCERFIELDS_STATUS.Vacant);
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === SORT_ORDER.asc;
+    setOrder(isAsc ? SORT_ORDER.desc : SORT_ORDER.asc);
     setOrderBy(property);
   };
 
   // When a row is Clicked
-  const handleClick = (event, name) => {};
+  const handleClick = (event, row) => {};
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <TableContainer>
-          <Table className={classes.table}>
-            <EnhancedTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              statusShown={statusShown}
-              setStatusShown={setStatusShown}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy), statusShown).map((row) => {
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.name)}
-                    key={row.name}
-                  >
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.price}</TableCell>
-                    <TableCell>{row.distance}</TableCell>
-                    <TableCell>{row.status}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </div>
+    <TableContainer component={Paper} className={classes.root}>
+      <Table>
+        <EnhancedTableHead
+          classes={classes}
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={handleRequestSort}
+          statusShown={statusShown}
+          setStatusShown={setStatusShown}
+        />
+        <TableBody>
+          {stableSort(rows, getComparator(order, orderBy), statusShown).map(
+            (row) => {
+              return (
+                <TableRow
+                  onClick={(event) => handleClick(event, row)}
+                  key={row.placeId}
+                  className={
+                    row.status === SOCCERFIELDS_STATUS.Vacant
+                      ? classes.vacantRow
+                      : classes.fullRow
+                  }
+                >
+                  <TableCell>
+                    <Typography color="secondary">{row.name}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color="secondary">{row.price}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color="secondary">{row.distance}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color="secondary">{row.status}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`/soccer-fields/${row.placeId}`}>
+                      <a style={{ textDecoration: 'none' }}>
+                        <Typography color="secondary">View</Typography>
+                      </a>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              );
+            }
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
