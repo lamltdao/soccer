@@ -15,7 +15,7 @@ import { UsersModule } from './users/users.module';
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => {
         return {
-          uri: `mongodb+srv://${config.get<string>('MONGO_ATLAS_USER')}:${config.get<string>('MONGO_ATLAS_PASSWORD')}@soccer-dev.vcnfc.mongodb.net/${config.get<string>('MONGO_ATLAS_DB')}?retryWrites=true&w=majority`,
+          uri: config.get<string>('MONGO_ATLAS_URI'),
           useNewUrlParser: true,
           useCreateIndex: true,
           useUnifiedTopology: true,
