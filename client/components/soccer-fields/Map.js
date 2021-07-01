@@ -22,7 +22,6 @@ import {
 // SEARCH FIELD COMPONENT
 const useSearchFieldStyles = makeStyles((theme) => ({
   root: {
-    zIndex: 1,
     backgroundColor: theme.palette.primary.main,
     maxWidth: 1000,
     minHeight: 400,
@@ -274,10 +273,11 @@ const SearchField = () => {
 const libs = ['places'];
 const Map = ({ soccerFields, setSoccerFields }) => {
   // LOAD API
+  const libRef = React.useRef(libs);
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: GOOGLEMAP_APIKEY,
-    libraries: libs, // Use Places API
+    libraries: libRef.current, // Use Places API
   });
 
   /**
@@ -373,10 +373,7 @@ const Map = ({ soccerFields, setSoccerFields }) => {
                 y: 20,
               },
             }}
-            label={{
-              text: name,
-              color: 'green',
-            }}
+            label={name}
           />
         );
       })}

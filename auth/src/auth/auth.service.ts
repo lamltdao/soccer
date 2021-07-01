@@ -28,6 +28,6 @@ export class AuthService {
   }
   async loginWithGgl(user) {
     console.log(user);
-   
+    
   }
 }

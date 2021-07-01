@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards, Get, Body } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Get, Body, Redirect } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
@@ -33,6 +33,7 @@ export class AppController {
 
   @UseGuards(GGlOauth20AuthGuard)
   @Get('/google/redirect')
+  @Redirect('http://localhost:3000/')
   async gglAuthRedirect(@Request() req) {
     return this.authService.loginWithGgl(req.user)
   }

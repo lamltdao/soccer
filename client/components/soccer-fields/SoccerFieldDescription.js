@@ -5,6 +5,7 @@ import NET from 'vanta/dist/vanta.net.min';
 import * as THREE from 'three';
 import { Typography } from '@material-ui/core';
 import BackButton from '../common/BackButton';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,10 +33,11 @@ const SoccerFieldDescription = ({ description, soccerFieldId }) => {
   }, [vantaEffect]);
 
   const classes = useStyles();
+  const router =  useRouter();
   return (
     <Grid container className={classes.root} ref={vantaRef} spacing={5}>
       <Grid item xs={12}>
-        <BackButton href="/soccer-fields" />
+        <BackButton onClick={() => router.push('/soccer-fields')} />
       </Grid>
       <Grid item xs={12}>
         <Typography
