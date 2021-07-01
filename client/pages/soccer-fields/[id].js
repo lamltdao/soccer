@@ -16,7 +16,7 @@ const SoccerFieldShow = ({ soccerField }) => {
       <Layout stickToSide={false}>
         <Grid container direction="column" spacing={5}>
           <Grid item>
-            {/* <SoccerFieldDescription soccerFieldId={soccerField.id} description={soccerField.description} /> */}
+            <SoccerFieldDescription soccerFieldId={soccerField.id} description={soccerField.description} />
           </Grid>
           <Grid item>
             <Schedules soccerFieldId={soccerField.id} schedules={soccerField.schedules} />

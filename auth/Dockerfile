@@ -12,4 +12,4 @@ RUN npm install --only=prod
 
 COPY . .
 
-CMD [ "npm", "run", "start:dev" ]
+CMD [ "npm", "run", "start" ]

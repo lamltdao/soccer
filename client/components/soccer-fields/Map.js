@@ -22,6 +22,7 @@ import {
 // SEARCH FIELD COMPONENT
 const useSearchFieldStyles = makeStyles((theme) => ({
   root: {
+    zIndex: 1,
     backgroundColor: theme.palette.primary.main,
     maxWidth: 1000,
     minHeight: 400,
@@ -273,11 +274,11 @@ const SearchField = () => {
 const libs = ['places'];
 const Map = ({ soccerFields, setSoccerFields }) => {
   // LOAD API
-  // const { isLoaded } = useJsApiLoader({
-  //   id: 'google-map-script',
-  //   googleMapsApiKey: GOOGLEMAP_APIKEY,
-  //   libraries: libs, // Use Places API
-  // });
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: GOOGLEMAP_APIKEY,
+    libraries: libs, // Use Places API
+  });
 
   /**
    * instance of map
@@ -344,46 +345,46 @@ const Map = ({ soccerFields, setSoccerFields }) => {
     height: '500px',
   };
 
-  return (
-    <>
-      <SearchField />
-    </>
-  );
-  // isLoaded ? (
-  // <GoogleMap
-  //   mapContainerStyle={containerStyle}
-  //   center={center}
-  //   zoom={12}
-  //   onLoad={onLoad}
-  //   onUnmount={onUnmount}
-  // >
+  // return (
   //   <>
-  //   <SearchField/>
-  //     {soccerFields.map((field, idx) => {
-  //       const { name, position, color } = field;
-  //       return (
-  //         <Marker
-  //           key={idx}
-  //           position={position}
-  //           icon={{
-  //             url: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
-  //             labelOrigin: {
-  //               x: 95,
-  //               y: 20,
-  //             },
-  //           }}
-  //           label={{
-  //             text: name,
-  //             color: 'green',
-  //           }}
-  //         />
-  //       );
-  //     })}
+  //     <SearchField />
   //   </>
-  // </GoogleMap>
-  // ) : (
-  //   <></>
   // );
+  return isLoaded ? (
+  <GoogleMap
+    mapContainerStyle={containerStyle}
+    center={center}
+    zoom={12}
+    onLoad={onLoad}
+    onUnmount={onUnmount}
+  >
+    <>
+    <SearchField/>
+      {soccerFields.map((field, idx) => {
+        const { name, position, color } = field;
+        return (
+          <Marker
+            key={idx}
+            position={position}
+            icon={{
+              url: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
+              labelOrigin: {
+                x: 95,
+                y: 20,
+              },
+            }}
+            label={{
+              text: name,
+              color: 'green',
+            }}
+          />
+        );
+      })}
+    </>
+  </GoogleMap>
+  ) : (
+    <></>
+  );
 };
 
 Map.propTypes = {

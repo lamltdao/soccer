@@ -26,4 +26,8 @@ export class AuthService {
       accessToken: this.jwtService.sign(payload),
     };
   }
+  async loginWithGgl(user) {
+    console.log(user);
+   
+  }
 }

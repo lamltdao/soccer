@@ -17,35 +17,30 @@ const SoccerFieldDescription = ({ description, soccerFieldId }) => {
   const { email, phoneNumber } = description.contact;
   const [vantaEffect, setVantaEffect] = useState(0);
   const vantaRef = useRef(null);
-  // useEffect(() => {
-  //   if (!vantaEffect) {
-  //     setVantaEffect(
-  //       NET({
-  //         el: vantaRef.current,
-  //         THREE,
-  //         color: 'green',
-  //         backgroundColor: 'black',
-  //         maxDistance: 34.0,
-  //       })
-  //     );
-  //   }
-  // }, [vantaEffect]);
+  useEffect(() => {
+    if (!vantaEffect) {
+      setVantaEffect(
+        NET({
+          el: vantaRef.current,
+          THREE,
+          color: 'green',
+          backgroundColor: 'black',
+          maxDistance: 34.0,
+        })
+      );
+    }
+  }, [vantaEffect]);
 
   const classes = useStyles();
   return (
-    <Grid
-      container
-      className={classes.root}
-      ref={vantaRef}
-      spacing={5}
-    >
+    <Grid container className={classes.root} ref={vantaRef} spacing={5}>
       <Grid item xs={12}>
         <BackButton href="/soccer-fields" />
       </Grid>
       <Grid item xs={12}>
         <Typography
           variant="h3"
-          color={ vantaEffect ? "secondary" : "primary"}
+          color={vantaEffect ? 'secondary' : 'primary'}
           style={{ textAlign: 'center' }}
         >
           {name}
@@ -53,12 +48,35 @@ const SoccerFieldDescription = ({ description, soccerFieldId }) => {
       </Grid>
       <Grid item xs={12}>
         <Grid container direction="row">
-          <Grid container xs={9} alignItems="flex-start">
-            <Typography variant="h5" color={ vantaEffect ? "secondary" : "primary"}>Address:&nbsp;{address}</Typography>
+          <Grid item xs={9}>
+            <Grid container alignItems="flex-start">
+              <Grid item>
+                <Typography
+                  variant="h5"
+                  color={vantaEffect ? 'secondary' : 'primary'}
+                >
+                  Address:&nbsp;{address}
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid container xs={3} alignItems="flex-start" direction="column">
-            <Typography variant="h5" color={ vantaEffect ? "secondary" : "primary"}>Contact:&nbsp;{email}</Typography>
-            <Typography variant="h5" color={ vantaEffect ? "secondary" : "primary"}>{phoneNumber}</Typography>
+          <Grid item xs={3}>
+            <Grid container alignItems="flex-start" direction="column">
+              <Grid item>
+                <Typography
+                  variant="h5"
+                  color={vantaEffect ? 'secondary' : 'primary'}
+                >
+                  Contact:&nbsp;{email}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  color={vantaEffect ? 'secondary' : 'primary'}
+                >
+                  {phoneNumber}
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -72,8 +90,8 @@ SoccerFieldDescription.propTypes = {
     address: PropTypes.string,
     contact: PropTypes.shape({
       email: PropTypes.string,
-      phoneNumber: PropTypes.string
-    })
+      phoneNumber: PropTypes.string,
+    }),
   }).isRequired,
   soccerFieldId: PropTypes.string.isRequired,
 };

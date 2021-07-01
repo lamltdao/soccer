@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  auth:
+    container_name: auth
+    image: midfieldmagician254/soccer-auth
+    build:
+      context: ./auth
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - MONGO_ATLAS_URI=mongodb+srv://user:auth@soccer-dev.vcnfc.mongodb.net/auth?retryWrites=true&w=majority
+      - JWT_SECRET=SECRET
+    volumes:
+      - ./auth:/app
+  client:
+    container_name: client
+    image: midfieldmagician254/soccer-client
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app

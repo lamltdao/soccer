@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 120,
     marginTop: theme.spacing(2),
   },
+  scheduleGrid: {
+    minHeight: 120,
+  },
 }));
 
 // REQUIRES: starts and ends on the same day (No soccerfield opens overnight, tho)
@@ -41,26 +44,48 @@ const Schedules = ({ schedules, soccerFieldId }) => {
                 className={classes.scheduleBox}
                 borderRadius={15}
               >
-                <Grid container direction="row" spacing={2}>
-                  <Grid item>
-                    {formatDate(time[0], time[1])}
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  className={classes.scheduleGrid}
+                >
+                  <Grid item xs={4}>
+                    <Typography variant="h5">
+                      {formatDate(time[0], time[1])}
+                    </Typography>
                   </Grid>
-                  <Grid item>
-                    {
-                      status === 'Full'
-                      ? (
-                        <Typography>
-                          {teams[0].name}
-                      VS
-                      {teams[1].name}
-                        </Typography>
-                      )
-                      : (
-                        <Typography>
-                          {teams[0].name} is looking for an opponent
-                        </Typography>
-                      )
-                    }
+                  <Grid item xs={6}>
+                    {status === 'Full' ? (
+                      <Grid container justify="space-evenly">
+                        <Grid item xs={4}>
+                          <Grid container justify="flex-start">
+                            <Typography variant="h5">
+                              {teams[0].name}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Grid container justify="center">
+                            <Typography variant="h5">VS</Typography>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Grid container justify="flex-end">
+                            <Typography variant="h5">
+                              {teams[1].name}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    ) : (
+                      <Typography variant="h5">
+                        {teams[0].name} is looking for an opponent
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Grid item xs={2}>
+                    
                   </Grid>
                 </Grid>
               </Box>
