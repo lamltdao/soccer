@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: soccer-client
-        image: midfieldmagician254/soccer-client
+        image: gcr.io/soccer-317809/soccer-client
 ---
 apiVersion: v1
 kind: Service

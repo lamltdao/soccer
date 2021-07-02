@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: soccer-auth
-        image: midfieldmagician254/soccer-auth
+        image: gcr.io/soccer-317809/soccer-auth
         env:
           - name: JWT_SECRET
             valueFrom:
