@@ -13,3 +13,8 @@ export const SORT_ORDER = {
   asc: 'asc',
   desc: 'desc',
 }
+
+export const HAS_OPPONENT_STATUS = {
+  Yes: 'yes',
+  No: 'no',
+}

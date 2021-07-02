@@ -1,9 +1,11 @@
 import React from 'react';
-import { Grid, makeStyles, Typography, TextField, Button } from '@material-ui/core';
+import { Grid, makeStyles, Typography, TextField, Button, MenuItem } from '@material-ui/core';
+import { HAS_OPPONENT_STATUS } from '../../constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: 'auto',
+        marginBottom: theme.spacing(2),
     },
     submitBtn: {
         backgroundColor: theme.palette.error.main,
@@ -36,7 +38,8 @@ const NewScheduleForm = () => {
                             required
                             fullWidth
                             name="soccerfield"
-                            label="Soccer Field"
+                            value="Soccer Field"
+                            disabled
                         />
                     </Grid>
                 </Grid>
@@ -64,6 +67,25 @@ const NewScheduleForm = () => {
                 <Grid container direction="row" alignItems="center">
                     <Grid item xs={3}>
                         <Typography variant="h6" style={{textAlign: 'center'}}>
+                            Date
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <TextField
+                            type="date"
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            name="date"
+                            defaultValue="2021-07-21"
+                        />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={12}>
+                <Grid container direction="row" alignItems="center">
+                    <Grid item xs={3}>
+                        <Typography variant="h6" style={{textAlign: 'center'}}>
                             Time
                         </Typography>
                     </Grid>
@@ -71,22 +93,26 @@ const NewScheduleForm = () => {
                         <Grid container direction="row" alignItems="center" spacing={5}>
                             <Grid item xs={4}>
                                 <TextField
+                                    type="time"
                                     variant="outlined"
                                     margin="normal"
                                     required
                                     fullWidth
                                     name="from"
                                     label="From"
+                                    defaultValue="07:30"
                                 />
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
+                                    type="time"
                                     variant="outlined"
                                     margin="normal"
                                     required
                                     fullWidth
                                     name="to"
                                     label="To"
+                                    defaultValue="07:30"
                                 />
                             </Grid>
                             <Grid item xs={4}>
@@ -111,8 +137,26 @@ const NewScheduleForm = () => {
                             margin="normal"
                             required
                             name="hasOpponent"
-                            label="No"
-                        />
+                            select
+                            // SelectProps={{
+                            //   MenuProps: {
+                            //     PaperProps: {
+                            //       className: classes.selectStatusMenu,
+                            //     }
+                            //   }
+                            // }}          
+                        >
+                            <MenuItem value={HAS_OPPONENT_STATUS.Yes}>
+                                <Typography>
+                                    Yes
+                                </Typography>
+                            </MenuItem>
+                            <MenuItem value={HAS_OPPONENT_STATUS.No}>
+                                <Typography>
+                                    No
+                                </Typography>
+                            </MenuItem>
+                        </TextField>
                     </Grid>
                 </Grid>
             </Grid>
@@ -120,7 +164,7 @@ const NewScheduleForm = () => {
                 <Grid item>
                     <Button variant="outlined" className={classes.submitBtn}>
                         <Typography color="secondary">
-                            Submit
+                            Checkout
                         </Typography>
                     </Button>
                 </Grid>
