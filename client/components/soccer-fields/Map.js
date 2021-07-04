@@ -1,13 +1,16 @@
-import React, { useCallback, memo, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, memo, useState } from "react";
+import PropTypes from "prop-types";
 import {
   GoogleMap,
   useJsApiLoader,
   Marker,
   StandaloneSearchBox,
-} from '@react-google-maps/api';
-import { GOOGLEMAP_APIKEY, SOCCERFIELDS_STATUS } from '../../constants';
-import { useWindowSize } from '../../hooks/use-window-size';
+} from "@react-google-maps/api";
+import {
+  GOOGLEMAP_APIKEY,
+  HANOI_CENTER_COORDINATE,
+  SOCCERFIELDS_STATUS,
+} from "../../constants";
 import {
   makeStyles,
   Grid,
@@ -15,10 +18,9 @@ import {
   TextField,
   Button,
   MenuItem,
-  Select,
-} from '@material-ui/core';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+} from "@material-ui/core";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 // SEARCH FIELD COMPONENT
 const useSearchFieldStyles = makeStyles((theme) => ({
@@ -26,13 +28,13 @@ const useSearchFieldStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     maxWidth: 1000,
     minHeight: 400,
-    margin: 'auto',
+    margin: "auto",
     marginTop: theme.spacing(2),
     zIndex: 1,
-    position: 'relative'
+    position: "relative",
   },
   searchFieldTitle: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: theme.spacing(2),
   },
   searchFieldContainer: {
@@ -40,42 +42,42 @@ const useSearchFieldStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   searchBtnContainer: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   searchBtn: {
     backgroundColor: theme.palette.success.main,
     minWidth: 200,
-    '&:hover': {
+    "&:hover": {
       backgroundColor: theme.palette.success.light,
     },
   },
   queryTextfield: {
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
         borderColor: theme.palette.secondary.main,
       },
-      '&:hover fieldset': {
+      "&:hover fieldset": {
         borderColor: theme.palette.success.main,
       },
-      '&.Mui-focused fieldset': {
+      "&.Mui-focused fieldset": {
         borderColor: theme.palette.success.main,
       },
     },
-    '& .MuiInputLabel-root': {
+    "& .MuiInputLabel-root": {
       color: theme.palette.secondary.main,
     },
-    '& .MuiInputBase-input': {
-      color: 'white',
+    "& .MuiInputBase-input": {
+      color: "white",
     },
   },
   selectStatusMenu: {
-    '& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover': {
+    "& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover": {
       backgroundColor: theme.palette.success.light,
     },
-    '& .MuiListItem-root': {
+    "& .MuiListItem-root": {
       backgroundColor: theme.palette.info.main,
     },
-    '& .MuiList-padding': {
+    "& .MuiList-padding": {
       padding: 0,
     },
   },
@@ -91,205 +93,194 @@ const SearchField = ({ open }) => {
     e.preventDefault();
     setter(e.target.value);
   };
-  return open ? (    <div className={classes.root}>
-    <Typography
-      className={classes.searchFieldTitle}
-      variant="h4"
-      color="secondary"
-    >
-      Filter options
-    </Typography>
-    <Grid
-      container
-      spacing={5}
-      direction="column"
-      alignItems="stretch"
-      className={classes.searchFieldContainer}
-    >
-      {/* <Grid item xs={12}> */}
-      {/* <StandaloneSearchBox>
-        <input
-          type="text"
-          placeholder="Customized your placeholder"
-          style={{
-            boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            width: `240px`,
-            height: `32px`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
-            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
-            outline: `none`,
-            textOverflow: `ellipses`,
-            position: 'absolute',
-            left: '50%',
-            marginLeft: '-120px',
-          }}
-        />
-      </StandaloneSearchBox> */}
-      {/* </Grid> */}
-      <Grid item xs={12}>
-        <Grid container direction="row" alignItems="center">
-          <Grid item xs={2}>
-            <Typography color="secondary">Your location:</Typography>
-          </Grid>
-          <Grid item xs={10}>
-            {/** WIll be replaced by StandaloneSearchbox */}
-            <TextField
-              className={classes.queryTextfield}
-              color="secondary"
-              style={{ width: '100%' }}
-              variant="outlined"
-              label="Enter your location here"
-            />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container direction="row" alignItems="center">
-          <Grid item xs={2}>
-            <Typography color="secondary">Other locations:</Typography>
-          </Grid>
-          <Grid item xs={10}>
-            {/** WIll be replaced by StandaloneSearchbox */}
-            <TextField
-              className={classes.queryTextfield}
-              color="secondary"
-              style={{ width: '100%' }}
-              variant="outlined"
-              label="Enter other locations here"
-            />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container direction="row" alignItems="center" spacing={3}>
-          {/** # fields shown */}
-          <Grid item xs={4}>
-            <Grid container direction="row" spacing={2} alignItems="center">
-              <Grid item xs={6}>
-                <Typography color="secondary"># fields shown:</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                {/** WIll be replaced by StandaloneSearchbox */}
+  return open ? (
+    <div className={classes.root}>
+      <Typography
+        className={classes.searchFieldTitle}
+        variant="h4"
+        color="secondary"
+      >
+        Filter options
+      </Typography>
+      <Grid
+        container
+        spacing={5}
+        direction="column"
+        alignItems="stretch"
+        className={classes.searchFieldContainer}
+      >
+        <Grid item xs={12}>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs={2}>
+              <Typography color="secondary">Your location:</Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <StandaloneSearchBox
+                bounds={
+                  new google.maps.LatLngBounds(null, {
+                    lat: 21.028511,
+                    lng: 105.804817,
+                  })
+                }
+              >
                 <TextField
                   className={classes.queryTextfield}
                   color="secondary"
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   variant="outlined"
-                  type="number"
-                  error={numShown < 0}
-                  value={numShown}
-                  onChange={(e) => handleNumberInputChange(e, setNumShown)}
                 />
-              </Grid>
+              </StandaloneSearchBox>
             </Grid>
           </Grid>
-          {/** price range */}
-          <Grid item xs={5}>
-            <Grid container direction="row" alignItems="center" spacing={1}>
-              <Grid item xs={4}>
-                <Typography color="secondary">Price range:</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                {/** WIll be replaced by StandaloneSearchbox */}
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs={2}>
+              <Typography color="secondary">Other locations:</Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <StandaloneSearchBox>
                 <TextField
                   className={classes.queryTextfield}
                   color="secondary"
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   variant="outlined"
-                  label="From"
-                  type="number"
-                  error={fromPrice > toPrice || fromPrice < 0}
-                  value={fromPrice}
-                  onChange={(e) => handleNumberInputChange(e, setFromPrice)}
                 />
-              </Grid>
-              <Grid item xs={4}>
-                {/** WIll be replaced by StandaloneSearchbox */}
-                <TextField
-                  className={classes.queryTextfield}
-                  color="secondary"
-                  style={{ width: '100%' }}
-                  variant="outlined"
-                  label="To"
-                  type="number"
-                  error={fromPrice > toPrice || toPrice < 0}
-                  value={toPrice}
-                  onChange={(e) => handleNumberInputChange(e, setToPrice)}
-                />
-              </Grid>
+              </StandaloneSearchBox>
             </Grid>
           </Grid>
-          {/** status */}
-          <Grid item xs={3}>
-            <Grid container direction="row" alignItems="center">
-              <Grid item xs={4}>
-                <Typography color="secondary">Status:</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container direction="row" alignItems="center" spacing={3}>
+            {/** # fields shown */}
+            <Grid item xs={4}>
+              <Grid container direction="row" spacing={2} alignItems="center">
+                <Grid item xs={6}>
+                  <Typography color="secondary">
+                    # soccer fields shown:
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  {/** WIll be replaced by StandaloneSearchbox */}
+                  <TextField
+                    className={classes.queryTextfield}
+                    color="secondary"
+                    style={{ width: "100%" }}
+                    variant="outlined"
+                    type="number"
+                    error={numShown < 0}
+                    value={numShown}
+                    onChange={(e) => handleNumberInputChange(e, setNumShown)}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={8}>
-                {/** WIll be replaced by StandaloneSearchbox */}
-                <TextField
-                  className={classes.queryTextfield}
-                  color="secondary"
-                  style={{ width: '100%' }}
-                  variant="outlined"
-                  label="Status"
-                  select
-                  defaultValue={SOCCERFIELDS_STATUS.All}
-                  SelectProps={{
-                    MenuProps: {
-                      PaperProps: {
-                        className: classes.selectStatusMenu,
-                      }
-                    }
-                  }}
-                >
-                  <MenuItem value={SOCCERFIELDS_STATUS.All}>
-                    <Typography color="secondary">All</Typography>
-                  </MenuItem>
-                  <MenuItem value={SOCCERFIELDS_STATUS.Vacant}>
-                    <Typography color="secondary">Vacant</Typography>
-                  </MenuItem>
-                  <MenuItem value={SOCCERFIELDS_STATUS.Full}>
-                    <Typography color="secondary">Full</Typography>
-                  </MenuItem>
-                </TextField>
+            </Grid>
+            {/** price range */}
+            <Grid item xs={5}>
+              <Grid container direction="row" alignItems="center" spacing={1}>
+                <Grid item xs={4}>
+                  <Typography color="secondary">Price range (VND):</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  {/** WIll be replaced by StandaloneSearchbox */}
+                  <TextField
+                    className={classes.queryTextfield}
+                    color="secondary"
+                    style={{ width: "100%" }}
+                    variant="outlined"
+                    label="From"
+                    type="number"
+                    error={fromPrice > toPrice || fromPrice < 0}
+                    value={fromPrice}
+                    onChange={(e) => handleNumberInputChange(e, setFromPrice)}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  {/** WIll be replaced by StandaloneSearchbox */}
+                  <TextField
+                    className={classes.queryTextfield}
+                    color="secondary"
+                    style={{ width: "100%" }}
+                    variant="outlined"
+                    label="To"
+                    type="number"
+                    error={fromPrice > toPrice || toPrice < 0}
+                    value={toPrice}
+                    onChange={(e) => handleNumberInputChange(e, setToPrice)}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            {/** status */}
+            <Grid item xs={3}>
+              <Grid container direction="row" alignItems="center">
+                <Grid item xs={4}>
+                  <Typography color="secondary">Status:</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  {/** WIll be replaced by StandaloneSearchbox */}
+                  <TextField
+                    className={classes.queryTextfield}
+                    color="secondary"
+                    style={{ width: "100%" }}
+                    variant="outlined"
+                    label="Status"
+                    select
+                    defaultValue={SOCCERFIELDS_STATUS.All}
+                    SelectProps={{
+                      MenuProps: {
+                        PaperProps: {
+                          className: classes.selectStatusMenu,
+                        },
+                      },
+                    }}
+                  >
+                    <MenuItem value={SOCCERFIELDS_STATUS.All}>
+                      <Typography color="secondary">All</Typography>
+                    </MenuItem>
+                    <MenuItem value={SOCCERFIELDS_STATUS.Vacant}>
+                      <Typography color="secondary">Vacant</Typography>
+                    </MenuItem>
+                    <MenuItem value={SOCCERFIELDS_STATUS.Full}>
+                      <Typography color="secondary">Full</Typography>
+                    </MenuItem>
+                  </TextField>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
+        <Grid item xs={12} className={classes.searchBtnContainer}>
+          <Button variant="outlined" className={classes.searchBtn}>
+            <Typography color="secondary">Search</Typography>
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item xs={12} className={classes.searchBtnContainer}>
-        <Button variant="outlined" className={classes.searchBtn}>
-          <Typography color="secondary">Search</Typography>
-        </Button>
-      </Grid>
-    </Grid>
-  </div>
-) : <></>;
+    </div>
+  ) : (
+    <></>
+  );
 };
 
 SearchField.propTypes = {
   open: PropTypes.bool.isRequired,
-}
+};
 
 // TOGGLE SEARCH FIELD COMPONENT
 const useToggleSearchFieldStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.primary.main,
-    '&:hover': {
+    "&:hover": {
       backgroundColor: theme.palette.success.main,
     },
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
   },
   icon: {
     color: theme.palette.secondary.main,
-  }
-}))
+  },
+}));
 
 const ToggleSearchField = ({ onClick, open }) => {
   const classes = useToggleSearchFieldStyles();
@@ -298,23 +289,27 @@ const ToggleSearchField = ({ onClick, open }) => {
       <Typography variant="h6" color="secondary">
         Filter Options
       </Typography>
-      {open ? <ArrowDropUpIcon className={classes.icon} /> : <ArrowDropDownIcon className={classes.icon} />}
+      {open ? (
+        <ArrowDropUpIcon className={classes.icon} />
+      ) : (
+        <ArrowDropDownIcon className={classes.icon} />
+      )}
     </Button>
-  )
-}
+  );
+};
 
 ToggleSearchField.propTypes = {
   onClick: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-}
+};
 
 // MAPS COMPONENT
-const libs = ['places'];
+const libs = ["places"];
 const Map = ({ soccerFields, setSoccerFields }) => {
   // LOAD API
   const libRef = React.useRef(libs);
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: GOOGLEMAP_APIKEY,
     libraries: libRef.current, // Use Places API
   });
@@ -327,13 +322,10 @@ const Map = ({ soccerFields, setSoccerFields }) => {
    */
   const getSoccerFields = (map) => {
     const searchReq = {
-      query: 'san bong',
-      fields: ['name', 'place_id', 'geometry'],
+      query: "san bong",
+      fields: ["name", "place_id", "geometry"],
       locationBias: {
-        center: {
-          lat: 21.028511,
-          lng: 105.804817,
-        },
+        center: HANOI_CENTER_COORDINATE,
         radius: 5000, // meter
       },
     };
@@ -352,7 +344,7 @@ const Map = ({ soccerFields, setSoccerFields }) => {
               lat,
               lng,
             },
-            color: 'green',
+            color: "green",
           });
         });
         setSoccerFields((prev) => {
@@ -364,64 +356,56 @@ const Map = ({ soccerFields, setSoccerFields }) => {
 
   // Run when map is loaded
   const onLoad = useCallback((map) => {
-    console.log('loaded');
+    console.log("loaded");
     getSoccerFields(map);
   }, []);
 
   // Run when map is unmounted
   const onUnmount = useCallback((map) => {}, []);
 
-  // Set center coordinate
-  const center = {
-    lat: 21.028511,
-    lng: 105.804817,
-  };
-
   // Set map container dimension
-  const containerWidth = useWindowSize().width;
   const containerStyle = {
-    width: `${containerWidth}px`,
-    height: '500px',
+    height: "500px",
   };
 
   const [searchFieldOpen, setSearchFieldOpen] = useState(true);
 
   return isLoaded ? (
-  <GoogleMap
-    mapContainerStyle={containerStyle}
-    center={center}
-    zoom={12}
-    onLoad={onLoad}
-    onUnmount={onUnmount}
-  >
-    <>
-    <ToggleSearchField
-      open={searchFieldOpen}
-      onClick={(e) => {
-        e.preventDefault();
-        setSearchFieldOpen(!searchFieldOpen);
-      }}
-    />
-    <SearchField open={searchFieldOpen} />
-      {soccerFields.map((field, idx) => {
-        const { name, position, color } = field;
-        return (
-          <Marker
-            key={idx}
-            position={position}
-            icon={{
-              url: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
-              labelOrigin: {
-                x: 95,
-                y: 20,
-              },
-            }}
-            label={name}
-          />
-        );
-      })}
-    </>
-  </GoogleMap>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={HANOI_CENTER_COORDINATE}
+      zoom={12}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+    >
+      <>
+        <ToggleSearchField
+          open={searchFieldOpen}
+          onClick={(e) => {
+            e.preventDefault();
+            setSearchFieldOpen(!searchFieldOpen);
+          }}
+        />
+        <SearchField open={searchFieldOpen} />
+        {soccerFields.map((field, idx) => {
+          const { name, position, color } = field;
+          return (
+            <Marker
+              key={idx}
+              position={position}
+              icon={{
+                url: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
+                labelOrigin: {
+                  x: 95,
+                  y: 20,
+                },
+              }}
+              label={name}
+            />
+          );
+        })}
+      </>
+    </GoogleMap>
   ) : (
     <></>
   );

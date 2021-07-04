@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import Layout from '../../layouts/Layout';
-import Map from '../../components/soccer-fields/Map';
-import SoccerFieldsTable from '../../components/soccer-fields/SoccerFieldsTable';
+import React, { useState } from "react";
+import Head from "next/head";
+import Layout from "../../layouts/Layout";
+import Map from "../../components/soccer-fields/Map";
+import SoccerFieldsTable from "../../components/soccer-fields/SoccerFieldsTable";
+import { FEATURES } from "../../constants";
 
 const SFIndex = ({ fetchedSoccerFields }) => {
   /** Interface for element in soccerFields fetched from DB
@@ -13,8 +14,8 @@ const SFIndex = ({ fetchedSoccerFields }) => {
    * },
    * color?: string
    */
-   const [soccerFields, setSoccerFields] = useState(fetchedSoccerFields);
-   return (
+  const [soccerFields, setSoccerFields] = useState(fetchedSoccerFields);
+  return (
     <div>
       <Head>
         <title>Soccer fields</title>
@@ -23,7 +24,7 @@ const SFIndex = ({ fetchedSoccerFields }) => {
       </Head>
       <Layout>
         <>
-          <Map soccerFields={soccerFields} setSoccerFields={setSoccerFields}/>
+          <Map soccerFields={soccerFields} setSoccerFields={setSoccerFields} />
           <SoccerFieldsTable soccerFields={soccerFields} />
         </>
       </Layout>
@@ -33,25 +34,12 @@ const SFIndex = ({ fetchedSoccerFields }) => {
 
 export async function getStaticProps(context) {
   // fetch some data on soccerfields, e.g: cached
-  const fetchedSoccerFields = [
-    {
-
-    },
-    {
-
-    },
-    {
-
-    },
-    {
-
-    },
-  ]
+  const fetchedSoccerFields = [{}, {}, {}, {}];
   return {
     props: {
-      fetchedSoccerFields
-    }
-  }
+      fetchedSoccerFields,
+    },
+  };
 }
 
 export default SFIndex;

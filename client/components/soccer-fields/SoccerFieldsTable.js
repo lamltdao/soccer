@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import Link from "next/link";
+import PropTypes from "prop-types";
 import {
   Typography,
   makeStyles,
@@ -16,13 +16,12 @@ import {
   TableSortLabel,
   Paper,
   FormControl,
-} from '@material-ui/core';
-import { SOCCERFIELDS_STATUS, SORT_ORDER } from '../../constants';
+} from "@material-ui/core";
+import { SOCCERFIELDS_STATUS, SORT_ORDER } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
-    padding: theme.spacing(2),
   },
 }));
 
@@ -70,9 +69,9 @@ function createData(placeId, name, price, distance, status) {
 }
 
 const rows = [
-  createData('ad', 'San bong Hn-ams', 800000, 8.7, 'Vacant'),
-  createData('asv', 'San bong HSGS', 1000000, 9.2, 'Vacant'),
-  createData('vsv', 'San bong Thanh phat', 500000, 8.5, 'Full'),
+  createData("ad", "San bong Hn-ams", 800000, 8.7, "Vacant"),
+  createData("asv", "San bong HSGS", 1000000, 9.2, "Vacant"),
+  createData("vsv", "San bong Thanh phat", 500000, 8.5, "Full"),
 ];
 
 // Helpers function dealing with sorting and selecting rows
@@ -88,14 +87,16 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function stableSort(rows, comparator, status) {
   const stabilizedThis = rows
-    .filter((row) => status === SOCCERFIELDS_STATUS.All || row.status === status)
+    .filter(
+      (row) => status === SOCCERFIELDS_STATUS.All || row.status === status
+    )
     .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -104,7 +105,6 @@ function stableSort(rows, comparator, status) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-
 
 // TABLE HEAD
 function EnhancedTableHead(props) {
@@ -143,26 +143,26 @@ function EnhancedTableHead(props) {
         <TableCell>
           <Typography color="secondary">Name</Typography>
         </TableCell>
-        <TableCell sortDirection={orderBy === 'price' ? order : false}>
+        <TableCell sortDirection={orderBy === "price" ? order : false}>
           <TableSortLabel
-            active={orderBy === 'price'}
-            direction={orderBy === 'price' ? order : 'asc'}
-            onClick={createSortHandler('price')}
+            active={orderBy === "price"}
+            direction={orderBy === "price" ? order : "asc"}
+            onClick={createSortHandler("price")}
             classes={{
-              icon: classes.sortIcon
+              icon: classes.sortIcon,
             }}
           >
             <Typography color="secondary">Price</Typography>
           </TableSortLabel>
         </TableCell>
-        <TableCell sortDirection={orderBy === 'distance' ? order : false}>
+        <TableCell sortDirection={orderBy === "distance" ? order : false}>
           <TableSortLabel
             classes={{
-              icon: classes.sortIcon
+              icon: classes.sortIcon,
             }}
-            active={orderBy === 'distance'}
-            direction={orderBy === 'distance' ? order : 'asc'}
-            onClick={createSortHandler('distance')}
+            active={orderBy === "distance"}
+            direction={orderBy === "distance" ? order : "asc"}
+            onClick={createSortHandler("distance")}
           >
             <Typography color="secondary">Distance</Typography>
           </TableSortLabel>
@@ -207,7 +207,7 @@ EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf([SORT_ORDER.asc, SORT_ORDER.desc]).isRequired,
-  orderBy: PropTypes.oneOf(['price', 'distance']).isRequired,
+  orderBy: PropTypes.oneOf(["price", "distance"]).isRequired,
   setStatusShown: PropTypes.func.isRequired,
   statusShown: PropTypes.string,
 };
@@ -217,7 +217,7 @@ EnhancedTableHead.propTypes = {
 // styles used for both EnhancedTable and EnhancedTableHead(passing down prop classes)
 const useTableStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
@@ -235,29 +235,29 @@ const useTableStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.error.main,
   },
   selectStatusMenu: {
-    '& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover': {
+    "& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover": {
       backgroundColor: theme.palette.info.main,
     },
-    '& .MuiListItem-root': {
+    "& .MuiListItem-root": {
       backgroundColor: theme.palette.primary.main,
     },
-    '& .MuiList-padding': {
+    "& .MuiList-padding": {
       padding: 0,
     },
   },
   dropDownIcon: {
-    color: 'white',
+    color: "white",
   },
   sortIcon: {
-    backgroundColor: 'white',
-  }
+    backgroundColor: "white",
+  },
 }));
 
 const EnhancedTable = () => {
   const classes = useTableStyles();
   // By default, items are sorted in ascending order of price
   const [order, setOrder] = useState(SORT_ORDER.asc);
-  const [orderBy, setOrderBy] = useState('price');
+  const [orderBy, setOrderBy] = useState("price");
   const [statusShown, setStatusShown] = useState(SOCCERFIELDS_STATUS.Vacant);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === SORT_ORDER.asc;
@@ -306,7 +306,7 @@ const EnhancedTable = () => {
                   </TableCell>
                   <TableCell>
                     <Link href={`/soccer-fields/${row.placeId}`}>
-                      <a style={{ textDecoration: 'none' }}>
+                      <a style={{ textDecoration: "none" }}>
                         <Typography color="secondary">View</Typography>
                       </a>
                     </Link>

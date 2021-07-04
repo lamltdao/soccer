@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
-import Head from 'next/head';
-import PropTypes from 'prop-types';
-import { CssBaseline, MuiThemeProvider } from '@material-ui/core';
-import { theme } from '../global/theme';
+import { useEffect } from "react";
+import Head from "next/head";
+import PropTypes from "prop-types";
+import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import { theme } from "../global/theme";
 
 const MyApp = ({ Component, pageProps }) => {
   useEffect(() => {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
+    const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }

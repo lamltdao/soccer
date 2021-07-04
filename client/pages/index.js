@@ -1,7 +1,7 @@
-import Head from 'next/head';
-import Description from '../components/index/Description';
-import Features from '../components/index/Features';
-import Layout from '../layouts/Layout';
+import Head from "next/head";
+import Description from "../components/index/Description";
+import Features from "../components/index/Features";
+import Layout from "../layouts/Layout";
 
 const Home = () => {
   return (

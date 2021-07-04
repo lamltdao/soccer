@@ -1,10 +1,16 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import { Grid, Typography, Button, makeStyles, Box } from '@material-ui/core';
-import { SCHEDULE_STATUS } from '../../constants';
+import React from "react";
+import { useRouter } from "next/router";
+import PropTypes from "prop-types";
+import { Grid, Typography, Button, makeStyles, Box } from "@material-ui/core";
+import { SCHEDULE_STATUS } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(5),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
   scheduleBox: {
     minHeight: 120,
     marginTop: theme.spacing(2),
@@ -56,7 +62,7 @@ const Schedules = ({ schedules, soccerFieldId }) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    {status === 'Full' ? (
+                    {status === "Full" ? (
                       <Grid container justify="space-evenly">
                         <Grid item xs={4}>
                           <Grid container justify="flex-start">
@@ -84,9 +90,7 @@ const Schedules = ({ schedules, soccerFieldId }) => {
                       </Typography>
                     )}
                   </Grid>
-                  <Grid item xs={2}>
-                    
-                  </Grid>
+                  <Grid item xs={2}></Grid>
                 </Grid>
               </Box>
             </Grid>
@@ -96,7 +100,7 @@ const Schedules = ({ schedules, soccerFieldId }) => {
     );
   };
   return (
-    <>
+    <div className={classes.root}>
       {/** Titles and new schedule button */}
       <Grid container direction="row">
         <Grid item xs={6}>
@@ -122,7 +126,7 @@ const Schedules = ({ schedules, soccerFieldId }) => {
       </Grid>
       {/** Render schedules */}
       {renderSchedules(schedules)}
-    </>
+    </div>
   );
 };
 

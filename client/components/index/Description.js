@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import NET from 'vanta/dist/vanta.net.min';
-import * as THREE from 'three';
-import { makeStyles } from '@material-ui/core';
-import { Typography, Grid } from '@material-ui/core';
+import React, { useEffect, useRef, useState } from "react";
+import NET from "vanta/dist/vanta.net.min";
+import * as THREE from "three";
+import { makeStyles } from "@material-ui/core";
+import { Typography, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    height: '75vh',
+    height: "75vh",
   },
   description: {
     color: theme.palette.primary.contrastText,
@@ -23,8 +23,8 @@ const Description = () => {
         NET({
           el: vantaRef.current,
           THREE,
-          color: 'green',
-          backgroundColor: 'black',
+          color: "green",
+          backgroundColor: "black",
           maxDistance: 34.0,
         })
       );

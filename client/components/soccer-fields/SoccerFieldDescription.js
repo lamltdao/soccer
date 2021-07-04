@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Grid, makeStyles } from '@material-ui/core';
-import NET from 'vanta/dist/vanta.net.min';
-import * as THREE from 'three';
-import { Typography } from '@material-ui/core';
-import BackButton from '../common/BackButton';
-import { useRouter } from 'next/router';
+import React, { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
+import { Grid, makeStyles } from "@material-ui/core";
+import NET from "vanta/dist/vanta.net.min";
+import * as THREE from "three";
+import { Typography } from "@material-ui/core";
+import BackButton from "../common/BackButton";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,8 +24,8 @@ const SoccerFieldDescription = ({ description, soccerFieldId }) => {
         NET({
           el: vantaRef.current,
           THREE,
-          color: 'green',
-          backgroundColor: 'black',
+          color: "green",
+          backgroundColor: "black",
           maxDistance: 34.0,
         })
       );
@@ -33,17 +33,17 @@ const SoccerFieldDescription = ({ description, soccerFieldId }) => {
   }, [vantaEffect]);
 
   const classes = useStyles();
-  const router =  useRouter();
+  const router = useRouter();
   return (
-    <Grid container className={classes.root} ref={vantaRef} spacing={5}>
+    <Grid container className={classes.root} ref={vantaRef}>
       <Grid item xs={12}>
-        <BackButton onClick={() => router.push('/soccer-fields')} />
+        <BackButton onClick={() => router.push("/soccer-fields")} />
       </Grid>
       <Grid item xs={12}>
         <Typography
           variant="h3"
-          color={vantaEffect ? 'secondary' : 'primary'}
-          style={{ textAlign: 'center' }}
+          color={vantaEffect ? "secondary" : "primary"}
+          style={{ textAlign: "center" }}
         >
           {name}
         </Typography>
@@ -55,7 +55,7 @@ const SoccerFieldDescription = ({ description, soccerFieldId }) => {
               <Grid item>
                 <Typography
                   variant="h5"
-                  color={vantaEffect ? 'secondary' : 'primary'}
+                  color={vantaEffect ? "secondary" : "primary"}
                 >
                   Address:&nbsp;{address}
                 </Typography>
@@ -67,13 +67,13 @@ const SoccerFieldDescription = ({ description, soccerFieldId }) => {
               <Grid item>
                 <Typography
                   variant="h5"
-                  color={vantaEffect ? 'secondary' : 'primary'}
+                  color={vantaEffect ? "secondary" : "primary"}
                 >
                   Contact:&nbsp;{email}
                 </Typography>
                 <Typography
                   variant="h5"
-                  color={vantaEffect ? 'secondary' : 'primary'}
+                  color={vantaEffect ? "secondary" : "primary"}
                 >
                   {phoneNumber}
                 </Typography>

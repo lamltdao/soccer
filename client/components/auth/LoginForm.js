@@ -1,33 +1,33 @@
-import React from 'react';
-import Link from 'next/link';
-import Router from 'next/router';
-import axios from 'axios';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import React from "react";
+import Link from "next/link";
+import Router from "next/router";
+import axios from "axios";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    height: '100%',
+    height: "100%",
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -37,21 +37,21 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginForm = () => {
   const classes = useStyles();
-  const loginUser = event => {
+  const loginUser = (event) => {
     event.preventDefault();
-    axios('http://localhost:3001/api/auth/login', {
+    axios("http://localhost:3001/api/auth/login", {
       body: JSON.stringify({
         email: event.target.email.value,
         password: event.target.password.value,
       }),
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      method: 'POST'
+      method: "POST",
     }).then(({ data }) => {
       console.log(data);
-    })
-  }
+    });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -102,14 +102,14 @@ const LoginForm = () => {
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
-                  {'Forgot your password ?'}
+                <a style={{ textDecoration: "none" }}>
+                  {"Forgot your password ?"}
                 </a>
               </Link>
             </Grid>
             <Grid item>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
+                <a style={{ textDecoration: "none" }}>
                   {"Don't have an account? Sign Up"}
                 </a>
               </Link>
@@ -118,14 +118,14 @@ const LoginForm = () => {
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
-                  {'Sign in with Google ?'}
+                <a style={{ textDecoration: "none" }}>
+                  {"Sign in with Google ?"}
                 </a>
               </Link>
             </Grid>
             <Grid item>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
+                <a style={{ textDecoration: "none" }}>
                   {"Sign in with Facebook"}
                 </a>
               </Link>
@@ -135,6 +135,6 @@ const LoginForm = () => {
       </div>
     </Container>
   );
-}
+};
 
 export default LoginForm;
