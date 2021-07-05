@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import {
@@ -18,6 +18,7 @@ import {
   FormControl,
 } from "@material-ui/core";
 import { SOCCERFIELDS_STATUS, SORT_ORDER } from "../../constants";
+import { SoccerFieldsContext } from "../../contexts/SoccerFieldsProvider";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,8 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SoccerFieldsTable = ({ soccerFields }) => {
+const SoccerFieldsTable = () => {
   const classes = useStyles();
+  const { soccerFields } = useContext(SoccerFieldsContext);
   return (
     <div className={classes.root}>
       {/* {soccerFields.length > 0 ? (

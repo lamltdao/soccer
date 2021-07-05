@@ -23,9 +23,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  featureLink: {
+  featureLinkHighlight: {
     backgroundColor: theme.palette.success.main,
   },
+  featureLink: {},
 }));
 
 const Navbar = () => {
@@ -65,7 +66,9 @@ const Navbar = () => {
                 <Grid
                   item
                   className={
-                    feature === FEATURES.SOCCERFIELDS && classes.featureLink
+                    feature === FEATURES.SOCCERFIELDS
+                      ? classes.featureLinkHighlight
+                      : classes.featureLink
                   }
                 >
                   <Button onClick={(e) => handleClick(e, "/soccer-fields")}>
@@ -81,8 +84,9 @@ const Navbar = () => {
                 <Grid
                   item
                   className={
-                    feature === FEATURES.LEAGUES_TOURNAMENTS &&
-                    classes.featureLink
+                    feature === FEATURES.LEAGUES_TOURNAMENTS
+                      ? classes.featureLinkHighlight
+                      : classes.featureLink
                   }
                 >
                   <Button
@@ -99,7 +103,11 @@ const Navbar = () => {
                 </Grid>
                 <Grid
                   item
-                  className={feature === FEATURES.BLOGS && classes.featureLink}
+                  className={
+                    feature === FEATURES.BLOGS
+                      ? classes.featureLinkHighlight
+                      : classes.featureLink
+                  }
                 >
                   <Button onClick={(e) => handleClick(e, "/blogs")}>
                     <Typography
@@ -117,7 +125,11 @@ const Navbar = () => {
               <Grid container direction="row" justify="flex-end" spacing={2}>
                 <Grid
                   item
-                  className={feature === FEATURES.LOGIN && classes.featureLink}
+                  className={
+                    feature === FEATURES.LOGIN
+                      ? classes.featureLinkHighlight
+                      : classes.featureLink
+                  }
                 >
                   <Link href="/login">
                     <a style={{ textDecoration: "none" }}>
@@ -127,7 +139,11 @@ const Navbar = () => {
                 </Grid>
                 <Grid
                   item
-                  className={feature === FEATURES.SIGNUP && classes.featureLink}
+                  className={
+                    feature === FEATURES.SIGNUP
+                      ? classes.featureLinkHighlight
+                      : classes.featureLink
+                  }
                 >
                   <Link href="/signup">
                     <a style={{ textDecoration: "none" }}>

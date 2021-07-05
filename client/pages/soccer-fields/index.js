@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Layout from "../../layouts/Layout";
-import Map from "../../components/soccer-fields/Map";
+import Map from "../../components/soccer-fields/map/Map";
 import SoccerFieldsTable from "../../components/soccer-fields/SoccerFieldsTable";
-import { FEATURES } from "../../constants";
+import { SoccerFieldsProvider } from "../../contexts/SoccerFieldsProvider";
 
 const SFIndex = ({ fetchedSoccerFields }) => {
   /** Interface for element in soccerFields fetched from DB
@@ -14,7 +14,6 @@ const SFIndex = ({ fetchedSoccerFields }) => {
    * },
    * color?: string
    */
-  const [soccerFields, setSoccerFields] = useState(fetchedSoccerFields);
   return (
     <div>
       <Head>
@@ -23,10 +22,12 @@ const SFIndex = ({ fetchedSoccerFields }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <>
-          <Map soccerFields={soccerFields} setSoccerFields={setSoccerFields} />
-          <SoccerFieldsTable soccerFields={soccerFields} />
-        </>
+        <SoccerFieldsProvider initSoccerFields={fetchedSoccerFields}>
+          <>
+            <Map />
+            <SoccerFieldsTable />
+          </>
+        </SoccerFieldsProvider>
       </Layout>
     </div>
   );

@@ -1,16 +1,10 @@
-import React, { useCallback, memo, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { StandaloneSearchBox } from "@react-google-maps/api";
 import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  StandaloneSearchBox,
-} from "@react-google-maps/api";
-import {
-  GOOGLEMAP_APIKEY,
   HANOI_CENTER_COORDINATE,
   SOCCERFIELDS_STATUS,
-} from "../../constants";
+} from "../../../constants";
 import {
   makeStyles,
   Grid,
@@ -19,11 +13,8 @@ import {
   Button,
   MenuItem,
 } from "@material-ui/core";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
-// SEARCH FIELD COMPONENT
-const useSearchFieldStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.primary.main,
     maxWidth: 1000,
@@ -84,14 +75,25 @@ const useSearchFieldStyles = makeStyles((theme) => ({
 }));
 
 const SearchField = ({ open }) => {
-  const classes = useSearchFieldStyles();
+  const classes = useStyles();
   const [numShown, setNumShown] = useState(0);
   const [fromPrice, setFromPrice] = useState(0);
   const [toPrice, setToPrice] = useState(0);
+  const [yourLocation, setYourLocation] = useState("");
+  const [otherLocation, setOtherLocation] = useState("");
+  const [otherLocations, setOtherLocations] = useState([]);
 
-  const handleNumberInputChange = (e, setter) => {
+  const handleInputChange = (e, setter) => {
     e.preventDefault();
     setter(e.target.value);
+  };
+
+  const handleAddOtherLocation = (e) => {
+    e.preventDefault();
+    setOtherLocations((prevLocations) => {
+      return [...prevLocations, otherLocation];
+    });
+    setOtherLocation("");
   };
   return open ? (
     <div className={classes.root}>
@@ -117,10 +119,7 @@ const SearchField = ({ open }) => {
             <Grid item xs={10}>
               <StandaloneSearchBox
                 bounds={
-                  new google.maps.LatLngBounds(null, {
-                    lat: 21.028511,
-                    lng: 105.804817,
-                  })
+                  new google.maps.LatLngBounds(null, HANOI_CENTER_COORDINATE)
                 }
               >
                 <TextField
@@ -128,6 +127,8 @@ const SearchField = ({ open }) => {
                   color="secondary"
                   style={{ width: "100%" }}
                   variant="outlined"
+                  value={yourLocation}
+                  onChange={(e) => handleInputChange(e, setYourLocation)}
                 />
               </StandaloneSearchBox>
             </Grid>
@@ -145,8 +146,13 @@ const SearchField = ({ open }) => {
                   color="secondary"
                   style={{ width: "100%" }}
                   variant="outlined"
+                  value={otherLocation}
+                  onChange={(e) => handleInputChange(e, setOtherLocation)}
                 />
               </StandaloneSearchBox>
+              <Button variant="outlined" onClick={handleAddOtherLocation}>
+                <Typography>Add location</Typography>
+              </Button>
             </Grid>
           </Grid>
         </Grid>
@@ -161,7 +167,6 @@ const SearchField = ({ open }) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  {/** WIll be replaced by StandaloneSearchbox */}
                   <TextField
                     className={classes.queryTextfield}
                     color="secondary"
@@ -170,7 +175,7 @@ const SearchField = ({ open }) => {
                     type="number"
                     error={numShown < 0}
                     value={numShown}
-                    onChange={(e) => handleNumberInputChange(e, setNumShown)}
+                    onChange={(e) => handleInputChange(e, setNumShown)}
                   />
                 </Grid>
               </Grid>
@@ -182,7 +187,6 @@ const SearchField = ({ open }) => {
                   <Typography color="secondary">Price range (VND):</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  {/** WIll be replaced by StandaloneSearchbox */}
                   <TextField
                     className={classes.queryTextfield}
                     color="secondary"
@@ -192,11 +196,10 @@ const SearchField = ({ open }) => {
                     type="number"
                     error={fromPrice > toPrice || fromPrice < 0}
                     value={fromPrice}
-                    onChange={(e) => handleNumberInputChange(e, setFromPrice)}
+                    onChange={(e) => handleInputChange(e, setFromPrice)}
                   />
                 </Grid>
                 <Grid item xs={4}>
-                  {/** WIll be replaced by StandaloneSearchbox */}
                   <TextField
                     className={classes.queryTextfield}
                     color="secondary"
@@ -206,7 +209,7 @@ const SearchField = ({ open }) => {
                     type="number"
                     error={fromPrice > toPrice || toPrice < 0}
                     value={toPrice}
-                    onChange={(e) => handleNumberInputChange(e, setToPrice)}
+                    onChange={(e) => handleInputChange(e, setToPrice)}
                   />
                 </Grid>
               </Grid>
@@ -218,7 +221,6 @@ const SearchField = ({ open }) => {
                   <Typography color="secondary">Status:</Typography>
                 </Grid>
                 <Grid item xs={8}>
-                  {/** WIll be replaced by StandaloneSearchbox */}
                   <TextField
                     className={classes.queryTextfield}
                     color="secondary"
@@ -266,162 +268,4 @@ SearchField.propTypes = {
   open: PropTypes.bool.isRequired,
 };
 
-// TOGGLE SEARCH FIELD COMPONENT
-const useToggleSearchFieldStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.primary.main,
-    "&:hover": {
-      backgroundColor: theme.palette.success.main,
-    },
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-  },
-  icon: {
-    color: theme.palette.secondary.main,
-  },
-}));
-
-const ToggleSearchField = ({ onClick, open }) => {
-  const classes = useToggleSearchFieldStyles();
-  return (
-    <Button onClick={onClick} variant="outlined" className={classes.root}>
-      <Typography variant="h6" color="secondary">
-        Filter Options
-      </Typography>
-      {open ? (
-        <ArrowDropUpIcon className={classes.icon} />
-      ) : (
-        <ArrowDropDownIcon className={classes.icon} />
-      )}
-    </Button>
-  );
-};
-
-ToggleSearchField.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-};
-
-// MAPS COMPONENT
-const libs = ["places"];
-const Map = ({ soccerFields, setSoccerFields }) => {
-  // LOAD API
-  const libRef = React.useRef(libs);
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: GOOGLEMAP_APIKEY,
-    libraries: libRef.current, // Use Places API
-  });
-
-  /**
-   * instance of map
-   * currently get 1 place by query
-   * later will be fetching to DB
-   * @param {*} map
-   */
-  const getSoccerFields = (map) => {
-    const searchReq = {
-      query: "san bong",
-      fields: ["name", "place_id", "geometry"],
-      locationBias: {
-        center: HANOI_CENTER_COORDINATE,
-        radius: 5000, // meter
-      },
-    };
-    const service = new window.google.maps.places.PlacesService(map);
-    // bc a req to find multiple places is charged, we will fetch them first and store info in db
-    service.findPlaceFromQuery(searchReq, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        const loadedSoccerFields = [];
-        results.map((result) => {
-          const { name, place_id, geometry } = result;
-          const lat = geometry.location.lat();
-          const lng = geometry.location.lng();
-          loadedSoccerFields.push({
-            name,
-            position: {
-              lat,
-              lng,
-            },
-            color: "green",
-          });
-        });
-        setSoccerFields((prev) => {
-          return [...prev, ...loadedSoccerFields];
-        });
-      }
-    });
-  };
-
-  // Run when map is loaded
-  const onLoad = useCallback((map) => {
-    console.log("loaded");
-    getSoccerFields(map);
-  }, []);
-
-  // Run when map is unmounted
-  const onUnmount = useCallback((map) => {}, []);
-
-  // Set map container dimension
-  const containerStyle = {
-    height: "500px",
-  };
-
-  const [searchFieldOpen, setSearchFieldOpen] = useState(true);
-
-  return isLoaded ? (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={HANOI_CENTER_COORDINATE}
-      zoom={12}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
-    >
-      <>
-        <ToggleSearchField
-          open={searchFieldOpen}
-          onClick={(e) => {
-            e.preventDefault();
-            setSearchFieldOpen(!searchFieldOpen);
-          }}
-        />
-        <SearchField open={searchFieldOpen} />
-        {soccerFields.map((field, idx) => {
-          const { name, position, color } = field;
-          return (
-            <Marker
-              key={idx}
-              position={position}
-              icon={{
-                url: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
-                labelOrigin: {
-                  x: 95,
-                  y: 20,
-                },
-              }}
-              label={name}
-            />
-          );
-        })}
-      </>
-    </GoogleMap>
-  ) : (
-    <></>
-  );
-};
-
-Map.propTypes = {
-  soccerFields: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      position: PropTypes.shape({
-        lat: PropTypes.number,
-        lng: PropTypes.number,
-      }),
-      color: PropTypes.string,
-    })
-  ).isRequired,
-  setSoccerFields: PropTypes.func.isRequired,
-};
-export default memo(Map);
+export default SearchField;
