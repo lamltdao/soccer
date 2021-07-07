@@ -17,7 +17,7 @@ export class AuthService {
       const { password, _id:id, __v, ...userInfo } = user.toObject();
       return {...userInfo, id}
     }
-    throw new BadRequestException('Either email or password is incorrect');
+    return null;
   }
   
   login(user: IUser) {

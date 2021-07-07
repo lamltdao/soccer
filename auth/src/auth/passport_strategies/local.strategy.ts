@@ -1,6 +1,6 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { IUser } from 'src/users/interfaces/user-interface';
 
@@ -15,7 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(emailIn: string, passwordIn: string): Promise<IUser> {
     const user = await this.authService.validateUser(emailIn, passwordIn);
     if (!user) {
-      throw new NotFoundException();
+      throw new BadRequestException('Either email or password is incorrect');
     }
     return user;
   }
