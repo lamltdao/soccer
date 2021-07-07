@@ -10,8 +10,11 @@ import {
   Typography,
   IconButton,
   Button,
+  Avatar,
 } from "@material-ui/core";
 import { FEATURES } from "../constants";
+import useUser from "../hooks/use-user";
+import useRequest from "../hooks/use-request";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = () => {
+  const { user } = useUser();
   const classes = useStyles();
   const router = useRouter();
   const handleClick = (e, path) => {
@@ -42,6 +46,18 @@ const Navbar = () => {
     const getFeatureFromURL = window.location.pathname.substring(1);
     setFeature(getFeatureFromURL);
   }, []);
+
+  const { doRequest } = useRequest({
+    url: "/api/auth/logout",
+    method: "delete",
+    body: {},
+    onSuccess: () => router.push("/"),
+  });
+
+  const LogOut = async (e) => {
+    e.preventDefault();
+    await doRequest();
+  };
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -122,36 +138,60 @@ const Navbar = () => {
               </Grid>
             </Grid>
             <Grid item xs={3}>
-              <Grid container direction="row" justify="flex-end" spacing={2}>
+              {user ? (
                 <Grid
-                  item
-                  className={
-                    feature === FEATURES.LOGIN
-                      ? classes.featureLinkHighlight
-                      : classes.featureLink
-                  }
+                  container
+                  direction="row"
+                  justify="flex-end"
+                  alignItems="center"
+                  spacing={2}
                 >
-                  <Link href="/login">
-                    <a style={{ textDecoration: "none" }}>
-                      <Typography color="secondary">Login</Typography>
-                    </a>
-                  </Link>
+                  <Grid item>
+                    <Avatar
+                      style={{ backgroundColor: "green" }}
+                    >{`${user.name[0]}`}</Avatar>
+                  </Grid>
+                  <Grid item>
+                    <Typography>{user.username}</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button onClick={LogOut}>
+                      <Typography color="secondary">Log out</Typography>
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  className={
-                    feature === FEATURES.SIGNUP
-                      ? classes.featureLinkHighlight
-                      : classes.featureLink
-                  }
-                >
-                  <Link href="/signup">
-                    <a style={{ textDecoration: "none" }}>
-                      <Typography color="secondary">Sign up</Typography>
-                    </a>
-                  </Link>
+              ) : (
+                <Grid container direction="row" justify="flex-end" spacing={2}>
+                  <Grid
+                    item
+                    className={
+                      feature === FEATURES.LOGIN
+                        ? classes.featureLinkHighlight
+                        : classes.featureLink
+                    }
+                  >
+                    <Link href="/login">
+                      <a style={{ textDecoration: "none" }}>
+                        <Typography color="secondary">Login</Typography>
+                      </a>
+                    </Link>
+                  </Grid>
+                  <Grid
+                    item
+                    className={
+                      feature === FEATURES.SIGNUP
+                        ? classes.featureLinkHighlight
+                        : classes.featureLink
+                    }
+                  >
+                    <Link href="/signup">
+                      <a style={{ textDecoration: "none" }}>
+                        <Typography color="secondary">Sign up</Typography>
+                      </a>
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
+              )}
             </Grid>
           </Grid>
         </Toolbar>
