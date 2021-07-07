@@ -15,7 +15,7 @@ const login = (props) => {
       <Layout>
         <Grid container>
           <Grid item xs={6}>
-            <AuthBackground />
+            {/* <AuthBackground /> */}
           </Grid>
           <Grid item xs={6}>
             <LoginForm />

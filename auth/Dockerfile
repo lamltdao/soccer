@@ -6,10 +6,10 @@ WORKDIR /app
 
 RUN npm install @nestjs/cli
 
-COPY package.json .
+COPY package.json package-lock.json ./
 
 RUN npm install --only=prod
 
 COPY . .
 
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "start:dev" ]

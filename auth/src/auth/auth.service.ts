@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'src/users/helpers/hash-password';
+import * as bcrypt from 'bcrypt';
 import { IUser } from 'src/users/interfaces/user-interface';
 import { UsersService } from 'src/users/users.service';
 
@@ -13,21 +13,21 @@ export class AuthService {
 
   async validateUser(email: string, passwordIn: string) : Promise<IUser> {
     const user = await this.usersService.findOne(email);
-    if(user && compare(user.password, passwordIn)) {
+    if(user && await bcrypt.compare(passwordIn, user.password)) {
       const { password, _id:id, __v, ...userInfo } = user.toObject();
       return {...userInfo, id}
     }
-    return undefined;
+    throw new BadRequestException('Either email or password is incorrect');
   }
-
-  async login(user: IUser) {
+  
+  login(user: IUser) {
     const payload = { currentUser: user };
+    const accessToken = this.jwtService.sign(payload);
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken
     };
   }
   async loginWithGgl(user) {
     console.log(user);
-    
   }
 }

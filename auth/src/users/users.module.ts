@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
 import { User, UserSchema } from './schemas/user.schema';
-import { toHash } from './helpers/hash-password';
 
 @Module({
   imports: [MongooseModule.forFeatureAsync([{
@@ -12,7 +12,7 @@ import { toHash } from './helpers/hash-password';
       schema.pre('save', async function(done) {
         // if password not already hashed, hash it
         if(this.isModified('password')) {
-          const hashed = await toHash(this.get('password'));
+          const hashed = await bcrypt.hash(this.get('password'), 10);
           this.set('password', hashed);
         }
         done();

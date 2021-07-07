@@ -32,6 +32,8 @@ spec:
             value: '3001'
           - name: GGL_OAUTH_CLIENT_ID
             value: 1014209218280-gtcplhg7qofhjutasrm2f109od1jqif2.apps.googleusercontent.com
+          - name: BASE_URL
+            value: http://lamproject.xyz
           - name: GGL_OAUTH_CLIENT_SECRET
             valueFrom:
               secretKeyRef:

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,11 +8,12 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { List, ListItemText } from '@material-ui/core';
+import useRequest from '../../hooks/use-request';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,10 +34,56 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  errorMsg: {
+    color: theme.palette.error.main,
+  }
 }));
 
 const SignupForm = () => {
   const classes = useStyles();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const router = useRouter();
+  const { doRequest, errors } = useRequest({
+    url: '/api/auth/signup',
+    body: {
+      email,
+      password,
+      username,
+      name
+    },
+    method: 'post',
+    onSuccess: () => router.push('/login'),
+  });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await doRequest();
+  };
+
+  const handleInputChange = (e, setter) => {
+    e.preventDefault();
+    setter(e.target.value);
+  }
+
+  const renderErrors = (errs) => {
+    if(Array.isArray(errs)) {
+      return (
+        <List>
+          {errs.map((err) => (
+            <ListItemText primary={err} className={classes.errorMsg} />
+          ))}
+        </List>
+      )
+    }
+    return (
+      <List>
+        <ListItemText primary={errs} className={classes.errorMsg} />
+      </List>
+    )
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -47,7 +95,7 @@ const SignupForm = () => {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -55,8 +103,9 @@ const SignupForm = () => {
             fullWidth
             id="username"
             label="Username"
-            name="username"
             autoFocus
+            value={username}
+            onChange={(e) => handleInputChange(e, setUsername)}
           />
           <TextField
             variant="outlined"
@@ -65,8 +114,9 @@ const SignupForm = () => {
             fullWidth
             id="name"
             label="Name"
-            name="name"
             autoFocus
+            value={name}
+            onChange={(e) => handleInputChange(e, setName)}
           />
           <TextField
             variant="outlined"
@@ -75,25 +125,28 @@ const SignupForm = () => {
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={(e) => handleInputChange(e, setEmail)}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => handleInputChange(e, setPassword)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+          {renderErrors(errors)}
           <Button
             type="submit"
             fullWidth

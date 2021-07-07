@@ -1,58 +1,85 @@
-import React from "react";
-import Link from "next/link";
-import Router from "next/router";
-import axios from "axios";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import useRequest from '../../hooks/use-request';
+import { useRouter } from 'next/router';
+import { List, ListItemText } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    height: "100%",
+    height: '100%',
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  errorMsg: {
+    color: theme.palette.error.main,
+  }
 }));
 
 const LoginForm = () => {
   const classes = useStyles();
-  const loginUser = (event) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+  const { doRequest, errors } = useRequest({
+    url: '/api/auth/login',
+    body: {
+      email,
+      password,
+    },
+    method: 'post',
+    onSuccess: () => router.push('/'),
+  });
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios("http://localhost:3001/api/auth/login", {
-      body: JSON.stringify({
-        email: event.target.email.value,
-        password: event.target.password.value,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    }).then(({ data }) => {
-      console.log(data);
-    });
+    await doRequest();
   };
 
+  const handleInputChange = (e, setter) => {
+    e.preventDefault();
+    setter(e.target.value);
+  }
+
+  const renderErrors = (errs) => {
+    if(Array.isArray(errs)) {
+      return (
+        <List>
+          {errs.map((err) => (
+            <ListItemText primary={err} className={classes.errorMsg} />
+          ))}
+        </List>
+      )
+    }
+    return (
+      <List>
+        <ListItemText primary={errs} className={classes.errorMsg} />
+      </List>
+    )
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -63,7 +90,7 @@ const LoginForm = () => {
         <Typography component="h1" variant="h5">
           LOGIN
         </Typography>
-        <form className={classes.form} onSubmit={loginUser}>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -71,25 +98,28 @@ const LoginForm = () => {
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={(e) => handleInputChange(e, setEmail)}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => handleInputChange(e, setPassword)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+          {renderErrors(errors)}
           <Button
             type="submit"
             fullWidth
@@ -102,14 +132,14 @@ const LoginForm = () => {
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: "none" }}>
-                  {"Forgot your password ?"}
+                <a style={{ textDecoration: 'none' }}>
+                  {'Forgot your password ?'}
                 </a>
               </Link>
             </Grid>
             <Grid item>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: "none" }}>
+                <a style={{ textDecoration: 'none' }}>
                   {"Don't have an account? Sign Up"}
                 </a>
               </Link>
@@ -118,15 +148,15 @@ const LoginForm = () => {
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: "none" }}>
-                  {"Sign in with Google ?"}
+                <a style={{ textDecoration: 'none' }}>
+                  {'Sign in with Google ?'}
                 </a>
               </Link>
             </Grid>
             <Grid item>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: "none" }}>
-                  {"Sign in with Facebook"}
+                <a style={{ textDecoration: 'none' }}>
+                  {'Sign in with Facebook'}
                 </a>
               </Link>
             </Grid>
