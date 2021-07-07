@@ -7,13 +7,21 @@ import { IUser } from 'src/users/interfaces/user-interface';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => {
+        let jwt = null;
+        console.log(req.session);
+
+        if (req && req.session.accessToken) {
+          jwt = req.session.accessToken;
+        }
+        return jwt;
+      },
       ignoreExpiration: false,
       secretOrKey: `${process.env.JWT_SECRET}`,
     });
   }
   // attach to req.user
   async validate(payload: { currentUser: IUser }) {
-    return { currentUser: payload.currentUser };
+    return payload.currentUser;
   }
 }

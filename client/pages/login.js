@@ -27,14 +27,14 @@ const login = () => {
   );
 };
 
-export const getServerSideProps = async ({ req, res }) => {
-  // check if user is logged in by, say, taking a look at the session
-  return {
-    redirect: {
-      permanent: false,
-      destination: "/",
-    },
-  };
-};
+// export const getServerSideProps = async ({ req, res }) => {
+//   // check if user is logged in by, say, taking a look at the session
+//   return {
+//     redirect: {
+//       permanent: false,
+//       destination: "/",
+//     },
+//   };
+// };
 
 export default login;
