@@ -8,6 +8,7 @@ import {
   Redirect,
   Session,
   HttpCode,
+  Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
@@ -37,12 +38,18 @@ export class AppController {
     return res;
   }
 
+  @Delete('/logout')
+  @HttpCode(204)
+  logout(@Session() session) {
+    if(session.accessToken) {
+      delete session.accessToken;
+    }
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('/currentUser')
   getCurrentUser(@Request() req) {
-    return {
-      currentUser: req.user,
-    };
+    return req.user;
   }
 
   @UseGuards(GGlOauth20AuthGuard)

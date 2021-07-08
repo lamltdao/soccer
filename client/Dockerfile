@@ -1,10 +1,8 @@
-FROM node:14
+FROM node:14.17-alpine
   
-EXPOSE 3000
-
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
 RUN npm install --only=prod
 

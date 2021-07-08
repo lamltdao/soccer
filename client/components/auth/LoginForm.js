@@ -45,7 +45,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { doRequest, errors } = useRequest({
-    url: "http://localhost:3001/api/auth/login",
+    url: "/api/auth/login",
     body: {
       email,
       password,

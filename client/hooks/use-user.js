@@ -4,16 +4,10 @@ import useSWR from "swr";
 const fetcher = (url) => axios.get(url).then((res) => res.data.currentUser);
 
 const useUser = () => {
-  // const { data, error } = useSWR("/api/auth/currentUser", fetcher);
-  const data = {
-    id: "123",
-    name: "lam",
-    email: "lam@gmail.com",
-    username: "lamdao",
-  };
-  const error = null;
+  const { data, error } = useSWR("/api/auth/currentUser", fetcher);
+  const user = data || null;
   return {
-    user: data,
+    user,
     isLoading: !error && !data,
     isError: error,
   };

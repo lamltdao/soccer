@@ -1,12 +1,10 @@
-FROM node:14
-
-EXPOSE 3001
+FROM node:14.17-alpine
 
 WORKDIR /app
 
-RUN npm install @nestjs/cli
+COPY package*.json ./
 
-COPY package.json package-lock.json ./
+RUN npm install @nestjs/cli
 
 RUN npm install --only=prod
 

@@ -1,4 +1,5 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { IUser } from 'src/users/interfaces/user-interface';
@@ -7,12 +8,12 @@ import { IUser } from 'src/users/interfaces/user-interface';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: (req) => {
+      jwtFromRequest: (req: Request) => {
         let jwt = null;
-        console.log(req.session);
-
+        // @ts-ignore
         if (req && req.session.accessToken) {
-          jwt = req.session.accessToken;
+          // @ts-ignore
+          jwt = req.session.accessToken!;
         }
         return jwt;
       },
@@ -21,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   // attach to req.user
-  async validate(payload: { currentUser: IUser }) {
-    return payload.currentUser;
+  async validate(payload: { currentUser: IUser, iat: number, exp: number }) {
+    return {currentUser: payload.currentUser};
   }
 }

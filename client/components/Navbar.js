@@ -51,7 +51,7 @@ const Navbar = () => {
     url: "/api/auth/logout",
     method: "delete",
     body: {},
-    onSuccess: () => router.push("/"),
+    onSuccess: () => router.push("/login"),
   });
 
   const LogOut = async (e) => {

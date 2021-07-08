@@ -19,6 +19,7 @@ const useRequest = ({ url, method, body, onSuccess }) => {
        * message: string | string[],
        * error
        */
+      console.log(err);
       setErrors(err.response.data.message);
     }
   };
