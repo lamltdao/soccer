@@ -1,4 +1,14 @@
-import { Controller, Request, Post, UseGuards, Get, Body, Redirect, Session, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Get,
+  Body,
+  Redirect,
+  Session,
+  HttpCode,
+} from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
@@ -8,7 +18,10 @@ import { UsersService } from './users/users.service';
 
 @Controller('/api/auth')
 export class AppController {
-  constructor(private authService: AuthService, private usersService: UsersService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   @Post('/signup')
   async signup(@Body() createUserDto: CreateUserDto) {
@@ -20,14 +33,16 @@ export class AppController {
   @HttpCode(200)
   login(@Request() req, @Session() session) {
     const res = this.authService.login(req.user);
-    session = res;
+    session.accessToken = res.accessToken;
     return res;
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/currentUser')
   getCurrentUser(@Request() req) {
-    return req.user;
+    return {
+      currentUser: req.user,
+    };
   }
 
   @UseGuards(GGlOauth20AuthGuard)
@@ -38,6 +53,6 @@ export class AppController {
   @Get('/google/redirect')
   @Redirect(`${process.env.BASE_URL}`)
   async gglAuthRedirect(@Request() req) {
-    return this.authService.loginWithGgl(req.user)
+    return this.authService.loginWithGgl(req.user);
   }
 }

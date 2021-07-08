@@ -1,10 +1,11 @@
+import React from "react";
 import Head from "next/head";
 import Layout from "../layouts/Layout";
 import { Grid } from "@material-ui/core";
 import AuthBackground from "../components/auth/AuthBackground";
 import LoginForm from "../components/auth/LoginForm";
 
-const login = (props) => {
+const login = () => {
   return (
     <div>
       <Head>
@@ -25,5 +26,15 @@ const login = (props) => {
     </div>
   );
 };
+
+// export const getServerSideProps = async ({ req, res }) => {
+//   // check if user is logged in by, say, taking a look at the session
+//   return {
+//     redirect: {
+//       permanent: false,
+//       destination: "/",
+//     },
+//   };
+// };
 
 export default login;

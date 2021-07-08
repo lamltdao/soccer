@@ -9,7 +9,8 @@ Content-Type: application/json
 }
 
 ###
-POST http://lamproject.xyz/api/auth/login
+#POST http://lamproject.xyz/api/auth/login
+POST http://localhost:3001/api/auth/login
 Content-Type: application/json
 
 {
@@ -18,9 +19,10 @@ Content-Type: application/json
 }
 
 ###
-GET http://lamproject.xyz/api/auth/currentUser
+GET http://localhost:3001/api/auth/currentUser
+# GET http://lamproject.xyz/api/auth/currentUser
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXJyZW50VXNlciI6eyJuYW1lIjoibGFtIiwidXNlcm5hbWUiOiJsYW1kYW8iLCJlbWFpbCI6ImxhbUBnbWFpbC5jb20iLCJpZCI6IjYwZDFhMmYwZmEwNjdmMTY2NGExODYzZCJ9LCJpYXQiOjE2MjQ5MzQ0NzQsImV4cCI6MTYyNDkzNDUzNH0.TbUQL5cyNHm30M9opqykhZM51Y88PyidVbqoqA9JQBU
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXJyZW50VXNlciI6eyJuYW1lIjoibGFtIiwidXNlcm5hbWUiOiJsYW1kYW8iLCJlbWFpbCI6ImxhbUBnbWFpbC5jb20iLCJpZCI6IjYwZDFhMmYwZmEwNjdmMTY2NGExODYzZCJ9LCJpYXQiOjE2MjQ5MzQ0NzQsImV4cCI6MTYyNDkzNDUzNH0.TbUQL5cyNHm30M9opqykhZM51Y88PyidVbqoqA9JQBU
 
 POST http://lamproject.xyz/api/auth/login
 Content-Type: application/json
