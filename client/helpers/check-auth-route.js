@@ -1,14 +1,11 @@
-// used in getServerSideProps
-const checkAuthRoute = (ctx) => {
-  let isAuth = null;
+export const checkAuthRoute = async (ctx) => {
+  let isAuth = false;
   try {
     const { data } = await buildClient(ctx)
       .get('/api/auth/currentUser')
     if (data) {
       isAuth = true;
     }
-  } catch (err) {
-    isAuth = false;
-  }
+  } catch {}
   return isAuth;
 }

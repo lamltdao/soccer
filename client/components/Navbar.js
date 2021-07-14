@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,8 +33,7 @@ const useStyles = makeStyles((theme) => ({
   featureLink: {},
 }));
 
-const Navbar = () => {
-  const { user } = useUser();
+const Navbar = ({ user }) => {
   const classes = useStyles();
   const router = useRouter();
   const handleClick = (e, path) => {
@@ -200,4 +200,12 @@ const Navbar = () => {
   );
 };
 
+Navbar.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    username: PropTypes.string,
+    email: PropTypes.string,
+  }),
+}
 export default Navbar;

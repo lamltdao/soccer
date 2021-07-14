@@ -3,7 +3,7 @@ import Description from "../components/index/Description";
 import Features from "../components/index/Features";
 import Layout from "../layouts/Layout";
 
-const Home = () => {
+const Home = ({ user }) => {
   return (
     <div>
       <Head>
@@ -11,7 +11,7 @@ const Home = () => {
         <meta name="description" content="Developed in Next.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
+      <Layout user={user}>
         <>
           <Description />
           <Features />

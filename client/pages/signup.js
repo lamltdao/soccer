@@ -3,9 +3,9 @@ import { Grid } from "@material-ui/core";
 import AuthBackground from "../components/auth/AuthBackground";
 import SignupForm from "../components/auth/SignupForm";
 
-const signup = (props) => {
+const signup = ({ user }) => {
   return (
-    <Layout>
+    <Layout user={user}>
       <Grid container>
         <Grid item xs={6}>
           {/* <AuthBackground /> */}
@@ -18,4 +18,11 @@ const signup = (props) => {
   );
 };
 
+signup.getInitialProps = async (ctx, client, user) => {
+  if (ctx.res && user) {
+    ctx.res.writeHead(302, { Location: '/' });
+    ctx.res.end();
+  }
+  return {};
+}
 export default signup;

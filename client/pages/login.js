@@ -6,7 +6,7 @@ import AuthBackground from '../components/auth/AuthBackground';
 import LoginForm from '../components/auth/LoginForm';
 import buildClient from '../axios/build-client';
 
-const login = () => {
+const login = ({ user }) => {
   return (
     <div>
       <Head>
@@ -14,7 +14,7 @@ const login = () => {
         <meta name="description" content="Developed in Next.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
+      <Layout user={user}>
         <Grid container>
           <Grid item xs={6}>
             {/* <AuthBackground /> */}
@@ -28,28 +28,12 @@ const login = () => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  // check if user is logged in by, say, taking a look at the session
-  try {
-    const { data } = await buildClient(ctx)
-      .get('/api/auth/currentUser')
-    if (data) {
-      console.log(data);
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/',
-        },
-      };
-    }
-  } catch (err) {
-    console.log(err);
-    return {
-      props: {
-        
-      }
-    }
+login.getInitialProps = async (ctx, client, user) => {
+  if (ctx.res && user) {
+    ctx.res.writeHead(302, { Location: '/' });
+    ctx.res.end();
   }
+  return {};
 };
 
 export default login;
