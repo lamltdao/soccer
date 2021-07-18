@@ -1,5 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import {
+  ScheduleStatus,
+  Location,
+  Price,
+} from '../interfaces/soccerfield.interface';
 
 export type SoccerfieldDocument = Soccerfield & Document;
 
@@ -9,8 +14,8 @@ export type SoccerfieldDocument = Soccerfield & Document;
       delete ret.__v;
       ret.id = ret._id;
       delete ret._id;
-    }  
-  }
+    },
+  },
 })
 export class Soccerfield {
   // Sent along in GoogleMap Place Detail API to fetch data on a place
@@ -19,28 +24,41 @@ export class Soccerfield {
   placeId: string;
 
   @Prop({ required: true })
-  address: string;
+  isOpen: boolean;
 
   @Prop({ required: true })
-  location: {
-    lat: number;
-    lng: number;
-  };
+  address: string;
+
+  @Prop(
+    raw({
+      lat: {
+        type: Number,
+      },
+      lng: {
+        type: Number,
+      },
+    }),
+  )
+  location: Record<string, Location>;
 
   @Prop()
   phoneNumber: string;
 
-  @Prop({ required: true})
-  price: {
-    // could be enum of all currency
-    currency: string,
-    value: number
-  }
+  @Prop(
+    raw({
+      // could be enum of all currency
+      currency: {
+        type: String,
+      },
+      value: {
+        type: Number,
+      },
+    }),
+  )
+  price: Record<string, Price>;
 
-  @Prop({ required: true })
-  scheduleStatus: {
-
-  }
+  @Prop({ required: true, enum: [ScheduleStatus.Full, ScheduleStatus.Vacant] })
+  scheduleStatus: ScheduleStatus;
 }
 
-export const UserSchema = SchemaFactory.createForClass(Soccerfield);
+export const SoccerfieldSchema = SchemaFactory.createForClass(Soccerfield);
