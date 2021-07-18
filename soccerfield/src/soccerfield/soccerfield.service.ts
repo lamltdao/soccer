@@ -1,11 +1,7 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Soccerfield, SoccerfieldDocument } from './schemas/soccerfield.schema';
-import {
-  Location,
-  ScheduleStatus,
-  searchQuery,
-} from './interfaces/soccerfield.interface';
+import { Location, searchQuery } from './interfaces/soccerfield.interface';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -37,4 +33,8 @@ export class SoccerfieldService {
     userLocation: Location | null,
     otherLocations: Location[] | [],
   ) {}
+
+  async syncData(): Promise<void> {
+    // fetch GGL API, then update DB
+  }
 }

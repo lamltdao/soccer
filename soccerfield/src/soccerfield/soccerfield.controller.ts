@@ -1,19 +1,16 @@
 import { Body, Controller, Get } from '@nestjs/common';
 import { SoccerfieldService } from './soccerfield.service';
-import { Location, searchQuery } from './interfaces/soccerfield.interface';
+import { searchQuery } from './interfaces/soccerfield.interface';
 
 @Controller('soccerfield')
 export class SoccerfieldController {
   constructor(private soccerfieldService: SoccerfieldService) {}
 
   @Get()
-  all() {
-    return this.soccerfieldService.findAll();
-  }
-
-  @Get()
   async getByQuery(@Body() body) {
-    const query: searchQuery = body.searchQuery;
+    const query: searchQuery | null = body.searchQuery;
+    if (!query) return this.soccerfieldService.findAll();
+
     const filteredSoccerfieldList = await this.soccerfieldService.findByQuery(
       query,
     );
@@ -22,5 +19,10 @@ export class SoccerfieldController {
       query.userLocation,
       query.otherLocations,
     );
+  }
+
+  @Get('/sync')
+  async syncData() {
+    return this.soccerfieldService.syncData();
   }
 }

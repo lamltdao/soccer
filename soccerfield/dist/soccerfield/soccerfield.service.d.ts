@@ -7,4 +7,5 @@ export declare class SoccerfieldService {
     findAll(): Promise<SoccerfieldDocument[]>;
     findByQuery(query: searchQuery): Promise<SoccerfieldDocument[]>;
     getWithLocationsOptimized(soccerfields: SoccerfieldDocument[], userLocation: Location | null, otherLocations: Location[] | []): void;
+    syncData(): Promise<void>;
 }

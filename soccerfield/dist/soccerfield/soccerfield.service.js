@@ -34,6 +34,8 @@ let SoccerfieldService = class SoccerfieldService {
             .exec();
     }
     getWithLocationsOptimized(soccerfields, userLocation, otherLocations) { }
+    async syncData() {
+    }
 };
 SoccerfieldService = __decorate([
     common_1.Injectable(),

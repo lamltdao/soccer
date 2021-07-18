@@ -19,21 +19,17 @@ let SoccerfieldController = class SoccerfieldController {
     constructor(soccerfieldService) {
         this.soccerfieldService = soccerfieldService;
     }
-    all() {
-        return this.soccerfieldService.findAll();
-    }
     async getByQuery(body) {
         const query = body.searchQuery;
+        if (!query)
+            return this.soccerfieldService.findAll();
         const filteredSoccerfieldList = await this.soccerfieldService.findByQuery(query);
         return this.soccerfieldService.getWithLocationsOptimized(filteredSoccerfieldList, query.userLocation, query.otherLocations);
     }
+    async syncData() {
+        return this.soccerfieldService.syncData();
+    }
 };
-__decorate([
-    common_1.Get(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], SoccerfieldController.prototype, "all", null);
 __decorate([
     common_1.Get(),
     __param(0, common_1.Body()),
@@ -41,6 +37,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], SoccerfieldController.prototype, "getByQuery", null);
+__decorate([
+    common_1.Get('/sync'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], SoccerfieldController.prototype, "syncData", null);
 SoccerfieldController = __decorate([
     common_1.Controller('soccerfield'),
     __metadata("design:paramtypes", [soccerfield_service_1.SoccerfieldService])
