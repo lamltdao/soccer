@@ -1,11 +1,14 @@
 import { Model } from 'mongoose';
-import { SoccerfieldDocument } from './schemas/soccerfield.schema';
+import { Soccerfield, SoccerfieldDocument } from './schemas/soccerfield.schema';
 import { Location, searchQuery } from './interfaces/soccerfield.interface';
+import { HttpService } from '@nestjs/axios';
 export declare class SoccerfieldService {
     private soccerfieldModel;
-    constructor(soccerfieldModel: Model<SoccerfieldDocument>);
+    private httpService;
+    constructor(soccerfieldModel: Model<SoccerfieldDocument>, httpService: HttpService);
     findAll(): Promise<SoccerfieldDocument[]>;
     findByQuery(query: searchQuery): Promise<SoccerfieldDocument[]>;
     getWithLocationsOptimized(soccerfields: SoccerfieldDocument[], userLocation: Location | null, otherLocations: Location[] | []): void;
-    syncData(): Promise<void>;
+    syncData(): void;
+    getById(id: number): Promise<Soccerfield>;
 }

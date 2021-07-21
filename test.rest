@@ -26,3 +26,18 @@ Content-Type: application/json
 
 POST http://lamproject.xyz/api/auth/login
 Content-Type: application/json
+
+###
+POST http://localhost:3002/api/soccerfield
+Content-Type: application/json
+
+[
+  {
+    "address": "Khương Mai, Thanh Xuân, Hanoi, Vietnam",
+    "location": { "lat": 20.9941545, "lng": 105.8315216 },
+    "name": "Sân Bóng VSA",
+    "placeId": "ChIJXSRzU2KsNTER62_8QeVDpNU",
+    "price": { "currency": "VND", "value": 800000 },
+    "phoneNumber": "5182203425"
+  }
+]

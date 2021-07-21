@@ -19,7 +19,7 @@ __decorate([
     __metadata("design:type", String)
 ], Soccerfield.prototype, "placeId", void 0);
 __decorate([
-    mongoose_1.Prop({ required: true }),
+    mongoose_1.Prop(),
     __metadata("design:type", Boolean)
 ], Soccerfield.prototype, "isOpen", void 0);
 __decorate([
@@ -53,7 +53,11 @@ __decorate([
     __metadata("design:type", Object)
 ], Soccerfield.prototype, "price", void 0);
 __decorate([
-    mongoose_1.Prop({ required: true, enum: [soccerfield_interface_1.ScheduleStatus.Full, soccerfield_interface_1.ScheduleStatus.Vacant] }),
+    mongoose_1.Prop({
+        required: true,
+        enum: [soccerfield_interface_1.ScheduleStatus.Full, soccerfield_interface_1.ScheduleStatus.Vacant],
+        default: soccerfield_interface_1.ScheduleStatus.Vacant,
+    }),
     __metadata("design:type", String)
 ], Soccerfield.prototype, "scheduleStatus", void 0);
 Soccerfield = __decorate([

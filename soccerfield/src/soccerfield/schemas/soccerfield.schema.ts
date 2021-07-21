@@ -23,7 +23,7 @@ export class Soccerfield {
   @Prop({ required: true, unique: true })
   placeId: string;
 
-  @Prop({ required: true })
+  @Prop()
   isOpen: boolean;
 
   @Prop({ required: true })
@@ -57,7 +57,11 @@ export class Soccerfield {
   )
   price: Record<string, Price>;
 
-  @Prop({ required: true, enum: [ScheduleStatus.Full, ScheduleStatus.Vacant] })
+  @Prop({
+    required: true,
+    enum: [ScheduleStatus.Full, ScheduleStatus.Vacant],
+    default: ScheduleStatus.Vacant,
+  })
   scheduleStatus: ScheduleStatus;
 }
 

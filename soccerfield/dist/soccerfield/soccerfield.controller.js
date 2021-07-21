@@ -15,37 +15,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SoccerfieldController = void 0;
 const common_1 = require("@nestjs/common");
 const soccerfield_service_1 = require("./soccerfield.service");
+const microservices_1 = require("@nestjs/microservices");
 let SoccerfieldController = class SoccerfieldController {
-    constructor(soccerfieldService) {
+    constructor(soccerfieldService, client) {
         this.soccerfieldService = soccerfieldService;
+        this.client = client;
     }
-    async getByQuery(body) {
-        const query = body.searchQuery;
+    async index(query) {
         if (!query)
             return this.soccerfieldService.findAll();
         const filteredSoccerfieldList = await this.soccerfieldService.findByQuery(query);
         return this.soccerfieldService.getWithLocationsOptimized(filteredSoccerfieldList, query.userLocation, query.otherLocations);
     }
-    async syncData() {
+    syncData() {
         return this.soccerfieldService.syncData();
+    }
+    async show(id) {
+        return this.soccerfieldService.getById(id);
     }
 };
 __decorate([
     common_1.Get(),
-    __param(0, common_1.Body()),
+    __param(0, common_1.Body('searchQuery')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], SoccerfieldController.prototype, "getByQuery", null);
+], SoccerfieldController.prototype, "index", null);
 __decorate([
-    common_1.Get('/sync'),
+    common_1.Get('sync'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", void 0)
 ], SoccerfieldController.prototype, "syncData", null);
+__decorate([
+    common_1.Get(':id'),
+    __param(0, common_1.Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], SoccerfieldController.prototype, "show", null);
 SoccerfieldController = __decorate([
     common_1.Controller('soccerfield'),
-    __metadata("design:paramtypes", [soccerfield_service_1.SoccerfieldService])
+    __param(1, common_1.Inject('SOCCERFIELD_SERVICE')),
+    __metadata("design:paramtypes", [soccerfield_service_1.SoccerfieldService,
+        microservices_1.ClientProxy])
 ], SoccerfieldController);
 exports.SoccerfieldController = SoccerfieldController;
 //# sourceMappingURL=soccerfield.controller.js.map

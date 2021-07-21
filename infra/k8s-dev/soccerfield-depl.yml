@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soccerfield-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: soccerfield
+  template:
+    metadata:
+      labels:
+        app: soccerfield
+    spec:
+      containers:
+        - name: soccer-soccerfield
+          image: gcr.io/soccer-317809/soccer-soccerfield
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_SECRET
+            - name: MONGO_ATLAS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-atlas-password
+                  key: MONGO_ATLAS_PASSWORD
+            - name: MONGO_ATLAS_URI
+              value: mongodb+srv://user:$(MONGO_ATLAS_PASSWORD)@soccer-dev.vcnfc.mongodb.net/soccerfield?retryWrites=true&w=majority
+            - name: PORT
+              value: "3002"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: soccerfield-srv
+spec:
+  selector:
+    app: soccerfield
+  ports:
+    - name: soccerfield
+      protocol: TCP
+      port: 3002 # port of the Service
+      targetPort: 3002 # port of the container in the pod that matches the Service by labels
