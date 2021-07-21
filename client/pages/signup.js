@@ -18,11 +18,4 @@ const signup = ({ user }) => {
   );
 };
 
-signup.getInitialProps = async (ctx, client, user) => {
-  if (ctx.res && user) {
-    ctx.res.writeHead(302, { Location: '/' });
-    ctx.res.end();
-  }
-  return {};
-}
 export default signup;

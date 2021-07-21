@@ -1,10 +1,10 @@
-import React from 'react';
-import Head from 'next/head';
-import Layout from '../layouts/Layout';
-import { Grid } from '@material-ui/core';
-import AuthBackground from '../components/auth/AuthBackground';
-import LoginForm from '../components/auth/LoginForm';
-import buildClient from '../axios/build-client';
+import React from "react";
+import Head from "next/head";
+import Layout from "../layouts/Layout";
+import { Grid } from "@material-ui/core";
+import AuthBackground from "../components/auth/AuthBackground";
+import LoginForm from "../components/auth/LoginForm";
+import buildClient from "../axios/build-client";
 
 const login = ({ user }) => {
   return (
@@ -26,14 +26,6 @@ const login = ({ user }) => {
       </Layout>
     </div>
   );
-};
-
-login.getInitialProps = async (ctx, client, user) => {
-  if (ctx.res && user) {
-    ctx.res.writeHead(302, { Location: '/' });
-    ctx.res.end();
-  }
-  return {};
 };
 
 export default login;

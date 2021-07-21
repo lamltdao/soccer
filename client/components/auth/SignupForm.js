@@ -1,34 +1,32 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { List, ListItemText } from '@material-ui/core';
-import useRequest from '../../hooks/use-request';
+import React, { useContext, useState } from "react";
+import Link from "next/link";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    height: '100%',
+    height: "100%",
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -36,54 +34,26 @@ const useStyles = makeStyles((theme) => ({
   },
   errorMsg: {
     color: theme.palette.error.main,
-  }
+  },
 }));
 
 const SignupForm = () => {
   const classes = useStyles();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
-  const router = useRouter();
-  const { doRequest, errors } = useRequest({
-    url: '/api/auth/signup',
-    body: {
-      email,
-      password,
-      username,
-      name
-    },
-    method: 'post',
-    onSuccess: () => router.push('/login'),
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const { signup } = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await doRequest();
+    await signup({ name, password, email, username });
   };
 
   const handleInputChange = (e, setter) => {
     e.preventDefault();
     setter(e.target.value);
-  }
-
-  const renderErrors = (errs) => {
-    if(Array.isArray(errs)) {
-      return (
-        <List>
-          {errs.map((err) => (
-            <ListItemText primary={err} className={classes.errorMsg} />
-          ))}
-        </List>
-      )
-    }
-    return (
-      <List>
-        <ListItemText primary={errs} className={classes.errorMsg} />
-      </List>
-    )
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -159,14 +129,14 @@ const SignupForm = () => {
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
-                  {'Forgot your password ?'}
+                <a style={{ textDecoration: "none" }}>
+                  {"Forgot your password ?"}
                 </a>
               </Link>
             </Grid>
             <Grid item>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
+                <a style={{ textDecoration: "none" }}>
                   {"Don't have an account? Sign Up"}
                 </a>
               </Link>
@@ -175,15 +145,15 @@ const SignupForm = () => {
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
-                  {'Sign in with Google ?'}
+                <a style={{ textDecoration: "none" }}>
+                  {"Sign in with Google ?"}
                 </a>
               </Link>
             </Grid>
             <Grid item>
               <Link href="/" variant="body2">
-                <a style={{ textDecoration: 'none' }}>
-                  {'Sign in with Facebook'}
+                <a style={{ textDecoration: "none" }}>
+                  {"Sign in with Facebook"}
                 </a>
               </Link>
             </Grid>

@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import App from "next/app";
 import Head from "next/head";
 import PropTypes from "prop-types";
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
 import { theme } from "../global/theme";
-import buildClient from "../axios/build-client";
 import { AuthProvider } from "../contexts/AuthProvider";
 
 const MyApp = ({ Component, pageProps, user }) => {
@@ -41,10 +40,12 @@ const MyApp = ({ Component, pageProps, user }) => {
         />
       </Head>
       <MuiThemeProvider theme={theme}>
-        <AuthProvider>
-          <CssBaseline />
-          <Component {...pageProps} user={user} />
-        </AuthProvider>
+        <SnackbarProvider maxSnack={5}>
+          <AuthProvider>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </AuthProvider>
+        </SnackbarProvider>
       </MuiThemeProvider>
     </>
   );
@@ -53,23 +54,6 @@ const MyApp = ({ Component, pageProps, user }) => {
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
-};
-
-MyApp.getInitialProps = async (appContext) => {
-  // check authentication
-  const client = await buildClient(appContext.ctx);
-  let user = null;
-  try {
-    const { data } = await client.get("/api/auth/currentUser");
-    if (data) user = data.currentUser;
-  } catch {}
-
-  // calls page's `getInitialProps` and fills `appProps.pageProps`
-  const pageProps = appContext.Component.getInitialProps
-    ? await appContext.Component.getInitialProps(appContext.ctx, client, user)
-    : {};
-
-  return { ...pageProps, user };
 };
 
 export default MyApp;

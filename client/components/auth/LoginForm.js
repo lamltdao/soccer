@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -11,9 +11,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import useRequest from "../../hooks/use-request";
-import { useRouter } from "next/router";
-import { List, ListItemText } from "@material-ui/core";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,20 +41,14 @@ const LoginForm = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
-  const { doRequest, errors } = useRequest({
-    url: "/api/auth/login",
-    body: {
-      email,
-      password,
-    },
-    method: "post",
-    onSuccess: () => router.push("/"),
-  });
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await doRequest();
+    await login({
+      email,
+      password,
+    });
   };
 
   const handleInputChange = (e, setter) => {
@@ -64,22 +56,6 @@ const LoginForm = () => {
     setter(e.target.value);
   };
 
-  const renderErrors = (errs) => {
-    if (Array.isArray(errs)) {
-      return (
-        <List>
-          {errs.map((err) => (
-            <ListItemText primary={err} className={classes.errorMsg} />
-          ))}
-        </List>
-      );
-    }
-    return (
-      <List>
-        <ListItemText primary={errs} className={classes.errorMsg} />
-      </List>
-    );
-  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -119,7 +95,6 @@ const LoginForm = () => {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          {renderErrors(errors)}
           <Button
             type="submit"
             fullWidth

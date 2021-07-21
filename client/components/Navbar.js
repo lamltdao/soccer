@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
@@ -14,8 +14,7 @@ import {
   Avatar,
 } from "@material-ui/core";
 import { FEATURES } from "../constants";
-import useUser from "../hooks/use-user";
-import useRequest from "../hooks/use-request";
+import { AuthContext } from "../contexts/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,9 +32,11 @@ const useStyles = makeStyles((theme) => ({
   featureLink: {},
 }));
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
   const classes = useStyles();
   const router = useRouter();
+  const { user, logout } = useContext(AuthContext);
+
   const handleClick = (e, path) => {
     e.preventDefault();
     router.push(path);
@@ -47,16 +48,9 @@ const Navbar = ({ user }) => {
     setFeature(getFeatureFromURL);
   }, []);
 
-  const { doRequest } = useRequest({
-    url: "/api/auth/logout",
-    method: "delete",
-    body: {},
-    onSuccess: () => router.push("/login"),
-  });
-
   const LogOut = async (e) => {
     e.preventDefault();
-    await doRequest();
+    await logout();
   };
   return (
     <div className={classes.root}>
@@ -207,5 +201,5 @@ Navbar.propTypes = {
     username: PropTypes.string,
     email: PropTypes.string,
   }),
-}
+};
 export default Navbar;
