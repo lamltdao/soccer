@@ -16,8 +16,11 @@ import { LocalAuthGuard } from './auth/guards/local-auth.guard';
 import { GGlOauth20AuthGuard } from './auth/guards/ggl-oauth20-auth.guard';
 import { CreateUserDto } from './users/dto/create-user.dto';
 import { UsersService } from './users/users.service';
+import { ApiBody, ApiHeader, ApiOkResponse } from '@nestjs/swagger';
+import { UserLoginDto } from './users/dto/user-login.dto';
+import { CurrentUserResponseDto } from './users/dto/current-user-response.dto';
 
-@Controller('/api/auth')
+@Controller('auth')
 export class AppController {
   constructor(
     private authService: AuthService,
@@ -32,6 +35,7 @@ export class AppController {
   @Post('/login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(200)
+  @ApiBody({ type: UserLoginDto })
   login(@Request() req, @Session() session) {
     const res = this.authService.login(req.user);
     session.accessToken = res.accessToken;
@@ -41,13 +45,20 @@ export class AppController {
   @Delete('/logout')
   @HttpCode(204)
   logout(@Session() session) {
-    if(session.accessToken) {
+    if (session.accessToken) {
       delete session.accessToken;
     }
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/currentUser')
+  @ApiHeader({
+    name: 'Cookie',
+    description: 'a jwt token',
+  })
+  @ApiOkResponse({
+    type: CurrentUserResponseDto,
+  })
   getCurrentUser(@Request() req) {
     return req.user;
   }
