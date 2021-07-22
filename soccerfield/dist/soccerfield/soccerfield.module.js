@@ -11,7 +11,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const microservices_1 = require("@nestjs/microservices");
 const config_1 = require("@nestjs/config");
-const soccerfield_schema_1 = require("./schemas/soccerfield.schema");
+const soccerfield_entity_1 = require("./entity/soccerfield.entity");
 const soccerfield_controller_1 = require("./soccerfield.controller");
 const soccerfield_service_1 = require("./soccerfield.service");
 const axios_1 = require("@nestjs/axios");
@@ -25,7 +25,7 @@ SoccerfieldModule = __decorate([
                 maxRedirects: 5,
             }),
             mongoose_1.MongooseModule.forFeature([
-                { name: soccerfield_schema_1.Soccerfield.name, schema: soccerfield_schema_1.SoccerfieldSchema },
+                { name: soccerfield_entity_1.Soccerfield.name, schema: soccerfield_entity_1.SoccerfieldSchema },
             ]),
             microservices_1.ClientsModule.registerAsync([
                 {

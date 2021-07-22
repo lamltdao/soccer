@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import { Transport } from '@nestjs/microservices';
 
@@ -8,6 +9,14 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
+
+  const config = new DocumentBuilder()
+    .setTitle('Soccerfield API Spec')
+    .setDescription('The soccerfield API description')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('apidoc', app, document);
 
   // connect microservice, a.k.a amqp client
   app.connectMicroservice({

@@ -1,7 +1,8 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Soccerfield, SoccerfieldDocument } from './schemas/soccerfield.schema';
-import { Location, searchQuery } from './interfaces/soccerfield.interface';
+import { Soccerfield, SoccerfieldDocument } from './entity/soccerfield.entity';
+import { SearchQueryDto } from './dto/searchQuery.dto';
+import { Location } from './entity/soccerfield.entity';
 import {
   BadRequestException,
   HttpCode,
@@ -24,7 +25,7 @@ export class SoccerfieldService {
     return this.soccerfieldModel.find().exec();
   }
 
-  async findByQuery(query: searchQuery): Promise<SoccerfieldDocument[]> {
+  async findByQuery(query: SearchQueryDto): Promise<SoccerfieldDocument[]> {
     const minPrice = query.price.range[0];
     const maxPrice = query.price.range[1];
     return this.soccerfieldModel

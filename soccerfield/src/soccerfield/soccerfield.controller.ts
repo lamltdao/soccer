@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param } from '@nestjs/common';
 import { SoccerfieldService } from './soccerfield.service';
-import { searchQuery } from './interfaces/soccerfield.interface';
+import { SearchQueryDto } from './dto/searchQuery.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('soccerfield')
 export class SoccerfieldController {
@@ -12,7 +13,8 @@ export class SoccerfieldController {
   ) {}
 
   @Get()
-  async index(@Body('searchQuery') query: searchQuery | null) {
+  @ApiBody({ type: SearchQueryDto })
+  async index(@Body('searchQuery') query: SearchQueryDto | null) {
     if (!query) return this.soccerfieldService.findAll();
 
     const filteredSoccerfieldList = await this.soccerfieldService.findByQuery(

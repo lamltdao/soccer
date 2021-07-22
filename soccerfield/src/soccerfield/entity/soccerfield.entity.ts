@@ -1,12 +1,22 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import {
-  ScheduleStatus,
-  Location,
-  Price,
-} from '../interfaces/soccerfield.interface';
 
 export type SoccerfieldDocument = Soccerfield & Document;
+
+export enum ScheduleStatus {
+  Full = 'full',
+  Vacant = 'vacant',
+}
+
+export class Location {
+  lat: number;
+  lng: number;
+}
+
+class Price {
+  currency: string;
+  value: number;
+}
 
 @Schema({
   toJSON: {
@@ -24,7 +34,7 @@ export class Soccerfield {
   placeId: string;
 
   @Prop()
-  isOpen: boolean;
+  isOpen?: boolean;
 
   @Prop({ required: true })
   address: string;
@@ -39,10 +49,10 @@ export class Soccerfield {
       },
     }),
   )
-  location: Record<string, Location>;
+  location: Location;
 
   @Prop()
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @Prop(
     raw({
@@ -55,7 +65,7 @@ export class Soccerfield {
       },
     }),
   )
-  price: Record<string, Price>;
+  price: Price;
 
   @Prop({
     required: true,

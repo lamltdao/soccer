@@ -1,15 +1,4 @@
-export declare enum ScheduleStatus {
-    Full = "full",
-    Vacant = "vacant"
-}
-export interface Location {
-    lat: number;
-    lng: number;
-}
-export interface Price {
-    currency: string;
-    value: number;
-}
+import { ScheduleStatus, Location } from '../schemas/soccerfield.entity';
 export declare class searchQuery {
     scheduleStatus: ScheduleStatus;
     numShown: number;

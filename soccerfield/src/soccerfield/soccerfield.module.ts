@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
-import { Soccerfield, SoccerfieldSchema } from './schemas/soccerfield.schema';
+import { Soccerfield, SoccerfieldSchema } from './entity/soccerfield.entity';
 import { SoccerfieldController } from './soccerfield.controller';
 import { SoccerfieldService } from './soccerfield.service';
 import { HttpModule } from '@nestjs/axios';

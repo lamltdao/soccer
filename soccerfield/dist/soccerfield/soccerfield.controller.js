@@ -13,9 +13,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SoccerfieldController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const soccerfield_service_1 = require("./soccerfield.service");
+const searchQuery_dto_1 = require("./dto/searchQuery.dto");
 const microservices_1 = require("@nestjs/microservices");
+const swagger_1 = require("@nestjs/swagger");
 let SoccerfieldController = class SoccerfieldController {
     constructor(soccerfieldService, client) {
         this.soccerfieldService = soccerfieldService;
@@ -36,19 +39,23 @@ let SoccerfieldController = class SoccerfieldController {
 };
 __decorate([
     common_1.Get(),
+    swagger_1.ApiBody({ type: searchQuery_dto_1.SearchQueryDto }),
+    openapi.ApiResponse({ status: 200, type: Object }),
     __param(0, common_1.Body('searchQuery')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [searchQuery_dto_1.SearchQueryDto]),
     __metadata("design:returntype", Promise)
 ], SoccerfieldController.prototype, "index", null);
 __decorate([
     common_1.Get('sync'),
+    openapi.ApiResponse({ status: 200 }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], SoccerfieldController.prototype, "syncData", null);
 __decorate([
     common_1.Get(':id'),
+    openapi.ApiResponse({ status: 200, type: require("./entity/soccerfield.entity").Soccerfield }),
     __param(0, common_1.Param('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
