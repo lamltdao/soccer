@@ -3,4 +3,5 @@ node_modules
 
 .env
 soccerfield_data_processing
-auth_dep
+
+k8s-secret-commands.txt
