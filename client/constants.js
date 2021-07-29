@@ -1,4 +1,4 @@
-export const GOOGLEMAP_APIKEY = "AIzaSyBDivkvTospzR99ytTc9eLlDZ-3306SLr8";
+export const GOOGLEMAP_APIKEY = process.env.NEXT_PUBLIC_GOOGLEMAP_APIKEY;
 export const SOCCERFIELDS_STATUS = {
   All: "All",
   Vacant: "Vacant",
