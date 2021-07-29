@@ -11,11 +11,15 @@
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
+    "@react-google-maps/api": "^2.2.0",
+    "@types/google.maps": "^3.45.4",
     "axios": "^0.21.1",
     "next": "11.0.0",
+    "notistack": "^1.0.9",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "swr": "^0.5.6",
     "three": "^0.129.0",
     "vanta": "^0.5.21"
   },

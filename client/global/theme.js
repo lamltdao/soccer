@@ -12,10 +12,11 @@ export const theme = createMuiTheme({
       main: '#C11818',
     },
     success: {
-      main: '#2C961B'
+      main: '#2C961B',
+      light: '#86C232'
     },
     info: {
-      main: '#86C232',
+      main: '#6B6E70',
     },
     background: {
       default: '#fff',

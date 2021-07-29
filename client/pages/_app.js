@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
-import Head from 'next/head';
-import PropTypes from 'prop-types';
-import { CssBaseline, MuiThemeProvider } from '@material-ui/core';
-import { theme } from '../global/theme';
+import { useEffect } from "react";
+import Head from "next/head";
+import PropTypes from "prop-types";
+import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
+import { theme } from "../global/theme";
+import { AuthProvider } from "../contexts/AuthProvider";
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps, user }) => {
   useEffect(() => {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
+    const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
@@ -38,8 +40,12 @@ const MyApp = ({ Component, pageProps }) => {
         />
       </Head>
       <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
+        <SnackbarProvider maxSnack={5}>
+          <AuthProvider>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </AuthProvider>
+        </SnackbarProvider>
       </MuiThemeProvider>
     </>
   );

@@ -1,0 +1,43 @@
+POST http://lamproject.xyz/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "lam",
+  "username": "lamdao",
+  "email": "lam@gmail.com",
+  "password": "12345"
+}
+
+###
+#POST http://lamproject.xyz/api/auth/login
+POST http://localhost:3001/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lam@gmail.com",
+  "password": "12345"
+}
+
+###
+GET http://localhost:3001/api/auth/currentUser
+# GET http://lamproject.xyz/api/auth/currentUser
+Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXJyZW50VXNlciI6eyJuYW1lIjoibGFtIiwidXNlcm5hbWUiOiJsYW1kYW8iLCJlbWFpbCI6ImxhbUBnbWFpbC5jb20iLCJpZCI6IjYwZDFhMmYwZmEwNjdmMTY2NGExODYzZCJ9LCJpYXQiOjE2MjQ5MzQ0NzQsImV4cCI6MTYyNDkzNDUzNH0.TbUQL5cyNHm30M9opqykhZM51Y88PyidVbqoqA9JQBU
+
+POST http://lamproject.xyz/api/auth/login
+Content-Type: application/json
+
+###
+POST http://localhost:3002/api/soccerfield
+Content-Type: application/json
+
+[
+  {
+    "address": "Khương Mai, Thanh Xuân, Hanoi, Vietnam",
+    "location": { "lat": 20.9941545, "lng": 105.8315216 },
+    "name": "Sân Bóng VSA",
+    "placeId": "ChIJXSRzU2KsNTER62_8QeVDpNU",
+    "price": { "currency": "VND", "value": 800000 },
+    "phoneNumber": "5182203425"
+  }
+]

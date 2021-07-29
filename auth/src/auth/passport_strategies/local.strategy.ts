@@ -1,8 +1,8 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { IUser } from 'src/users/interfaces/user-interface';
+import { UserResponseDto } from 'src/users/dto/user-response.dto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -12,10 +12,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   // AFTER this function is run is
   // the returned value attached as req.user
-  async validate(emailIn: string, passwordIn: string): Promise<IUser> {
+  async validate(
+    emailIn: string,
+    passwordIn: string,
+  ): Promise<UserResponseDto> {
     const user = await this.authService.validateUser(emailIn, passwordIn);
     if (!user) {
-      throw new NotFoundException();
+      throw new BadRequestException('Either email or password is incorrect');
     }
     return user;
   }

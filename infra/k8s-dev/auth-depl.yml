@@ -13,21 +13,42 @@ spec:
         app: auth
     spec:
       containers:
-      - name: auth
-        image: midfieldmagician254/auth
+      - name: soccer-auth
+        image: gcr.io/soccer-317809/soccer-auth
         env:
           - name: JWT_SECRET
             valueFrom:
               secretKeyRef:
                 name: jwt-secret
                 key: JWT_SECRET
-          - name: MONGO_ATLAS_USER
-            value: user
           - name: MONGO_ATLAS_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: mongo-atlas-password
-                auth
-      - MONGO_ATLAS_DB=auth
-      - PORT=3000
-      - JWT_SECRET=SECRET
+                key: MONGO_ATLAS_PASSWORD
+          - name: MONGO_ATLAS_URI
+            value: mongodb+srv://user:$(MONGO_ATLAS_PASSWORD)@soccer-dev.vcnfc.mongodb.net/auth?retryWrites=true&w=majority
+          - name: PORT
+            value: '3001'
+          - name: GGL_OAUTH_CLIENT_ID
+            value: 1014209218280-gtcplhg7qofhjutasrm2f109od1jqif2.apps.googleusercontent.com
+          - name: BASE_URL
+            value: http://lamproject.xyz
+          - name: GGL_OAUTH_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ggl-oauth-client-secret
+                key: GGL_OAUTH_CLIENT_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3001 # port of the Service
+      targetPort: 3001 # port of the container in the pod that matches the Service by labels

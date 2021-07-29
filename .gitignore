@@ -1,2 +1,11 @@
 node_modules
 .DS_STORE
+
+.env
+soccerfield_data_processing
+
+k8s-secret-commands.txt
+
+skaffold.yaml
+
+test.rest
