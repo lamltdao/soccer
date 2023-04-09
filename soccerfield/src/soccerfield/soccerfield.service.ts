@@ -2,23 +2,13 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Soccerfield, SoccerfieldDocument } from './entity/soccerfield.entity';
 import { SearchQueryDto } from './dto/searchQuery.dto';
-import { Location } from './entity/soccerfield.entity';
-import {
-  BadRequestException,
-  HttpCode,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SoccerfieldService {
   constructor(
     @InjectModel(Soccerfield.name)
     private soccerfieldModel: Model<SoccerfieldDocument>,
-    private httpService: HttpService,
   ) {}
 
   async findAll(): Promise<SoccerfieldDocument[]> {
@@ -37,35 +27,7 @@ export class SoccerfieldService {
       .exec();
   }
 
-  // Arrange soccerfields in terms of being the most optimized depending on locations
-  getWithLocationsOptimized(
-    soccerfields: SoccerfieldDocument[],
-    userLocation: Location | null,
-    otherLocations: Location[] | [],
-  ) {}
-
-  @HttpCode(HttpStatus.OK)
-  syncData(): void {
-    // fetch GGL API
-    const observable: Observable<AxiosResponse> = this.httpService.get(
-      `${process.env.SOCCERFIELD_SYNC_URL}`,
-      // 'https://jsonplaceholder.typicode.com/users',
-    );
-    observable.subscribe((res: AxiosResponse) => {
-      let syncSoccerfields = [];
-      // create or update db
-      if (res.data.status != 'OK') throw new BadRequestException();
-      syncSoccerfields.push(...res.data.results);
-      // more page of data to load, maximum: 3 pages(60 items) in total
-      if (res.data.next_page_token) {
-        // fetch again using next_page_token
-      }
-    });
-
-    // update or create soccerfield based on the result
-  }
-
-  async getById(id: number): Promise<Soccerfield> {
+  async getById(id: number): Promise<SoccerfieldDocument> {
     return this.soccerfieldModel.findById(id).exec();
   }
 }

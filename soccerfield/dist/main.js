@@ -9,6 +9,10 @@ dotenv.config();
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.setGlobalPrefix('api');
+    if (process.env.NODE_ENV !== 'production') {
+        console.log('cors enabled');
+        app.enableCors();
+    }
     const config = new swagger_1.DocumentBuilder()
         .setTitle('Soccerfield API Spec')
         .setDescription('The soccerfield API description')

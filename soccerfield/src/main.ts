@@ -10,6 +10,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
 
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('cors enabled');
+    app.enableCors();
+  }
+
   const config = new DocumentBuilder()
     .setTitle('Soccerfield API Spec')
     .setDescription('The soccerfield API description')

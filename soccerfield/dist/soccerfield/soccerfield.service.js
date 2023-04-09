@@ -17,11 +17,9 @@ const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
 const soccerfield_entity_1 = require("./entity/soccerfield.entity");
 const common_1 = require("@nestjs/common");
-const axios_1 = require("@nestjs/axios");
 let SoccerfieldService = class SoccerfieldService {
-    constructor(soccerfieldModel, httpService) {
+    constructor(soccerfieldModel) {
         this.soccerfieldModel = soccerfieldModel;
-        this.httpService = httpService;
     }
     async findAll() {
         return this.soccerfieldModel.find().exec();
@@ -35,33 +33,14 @@ let SoccerfieldService = class SoccerfieldService {
             .limit(query.numShown)
             .exec();
     }
-    getWithLocationsOptimized(soccerfields, userLocation, otherLocations) { }
-    syncData() {
-        const observable = this.httpService.get(`${process.env.SOCCERFIELD_SYNC_URL}`);
-        observable.subscribe((res) => {
-            let syncSoccerfields = [];
-            if (res.data.status != 'OK')
-                throw new common_1.BadRequestException();
-            syncSoccerfields.push(...res.data.results);
-            if (res.data.next_page_token) {
-            }
-        });
-    }
     async getById(id) {
         return this.soccerfieldModel.findById(id).exec();
     }
 };
-__decorate([
-    common_1.HttpCode(common_1.HttpStatus.OK),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], SoccerfieldService.prototype, "syncData", null);
 SoccerfieldService = __decorate([
     common_1.Injectable(),
     __param(0, mongoose_2.InjectModel(soccerfield_entity_1.Soccerfield.name)),
-    __metadata("design:paramtypes", [mongoose_1.Model,
-        axios_1.HttpService])
+    __metadata("design:paramtypes", [mongoose_1.Model])
 ], SoccerfieldService);
 exports.SoccerfieldService = SoccerfieldService;
 //# sourceMappingURL=soccerfield.service.js.map

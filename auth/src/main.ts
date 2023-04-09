@@ -12,6 +12,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('cors enabled');
+    app.enableCors();
+  }
+
   // Config express-session
   app.use(
     session({
